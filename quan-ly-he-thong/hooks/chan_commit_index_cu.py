@@ -33,14 +33,12 @@ COMMIT_HELP = re.compile(r"\s(?:-h|--help)\b")
 COMMIT_ALL = re.compile(r"\s(?:-[a-zA-Z]*a[a-zA-Z]*|--all)\b")
 INDEX_JSON = {
     "01_Origine/05_Meta/Index/vault-index.json",
-    "90_Meta/index/vault-index.json",
     "05_Evasion/01_Oeuvre/System/runtime/index.json",
     "60_Personal/fiction/System/runtime/index.json",
 }
 
 INDEX_SCRIPT_CANDIDATES = (
     Path("01_Origine/04_Tools/VaultTool/Core/vault_index.py"),
-    Path("70_Systems/vault-tools/vault_index.py"),
 )
 
 

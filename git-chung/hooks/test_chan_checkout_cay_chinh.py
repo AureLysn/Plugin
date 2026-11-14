@@ -12,7 +12,6 @@ HOOK = Path(__file__).with_name("chan_checkout_cay_chinh.py")
 
 CASES = [
     ("git checkout -b feat/test", "D:\\AureLysn", 2, "checkout -b trên cây chính D:\\AureLysn"),
-    ("git checkout -b feat/test", "D:\\AureLysnOS\\01_Vault", 2, "checkout -b trên cây chính cũ"),
     ("git switch main", "/d/AureLysn", 2, "git switch trên đường dẫn MSYS /d/AureLysn"),
     ("gh pr checkout 42", "D:\\AureLysn", 2, "gh pr checkout trên cây chính"),
     ("git -C D:/AureLysn checkout feat/x", "D:\\Other", 2, "git -C trỏ vào cây chính"),
