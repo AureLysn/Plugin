@@ -1,6 +1,6 @@
 # `git-chung` — Safe Git Operations & PreToolUse Guards
 
-General-purpose Git safety plugin for **all repositories** on Aurel's workstation (the vault root `D:\AureLysn`, a repository since 2026-11-12, and the three app repositories in `01_Origine/03_Systems/`: `Atelier`, `AureLysnOS`, `Portfolio_Web`). Its skills work in any Git repository; `nhanh-va-commit` and `git-cuu-ho` name vault paths (`01_Origine/04_Tools/VaultTool/…`, `01_Origine/05_Meta/Index/vault-index.json`) only in the steps that apply when the repository is the vault.
+General-purpose Git safety plugin for **all repositories** on Aurel's workstation (the vault root `D:\AureLysn`, a repository since 2026-11-12, the two app repositories in `01_Origine/03_Systems/`: `Atelier`, `AureLysnOS`, and the two zone repositories `05_Evasion/` and `04_Portfolio/`, the latter holding the website code in `Portfolio_Web/`). Its skills work in any Git repository; `nhanh-va-commit` and `git-cuu-ho` name vault paths (`01_Origine/04_Tools/VaultTool/…`, `01_Origine/05_Meta/Index/vault-index.json`) only in the steps that apply when the repository is the vault.
 
 ---
 
