@@ -53,7 +53,7 @@ description: "Diagnose and recover from Git faults without losing work: stale in
 
 ## Case 4 — Committed on `main` Instead of a Feature Branch
 
-This case is for a repository with a remote. In the vault, committing on `main` is the rule while it has no remote (`git-an-toan` §1.3); there is no `origin/main` to reset to.
+This case applies to every repository: none of them commits on `main` (`git-an-toan` §1.3).
 
 If commits were made on local `main` before pushing:
 1. Create a branch pointing at the current `HEAD` so the commits are preserved:

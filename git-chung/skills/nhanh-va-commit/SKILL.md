@@ -1,15 +1,15 @@
 ---
 name: nhanh-va-commit
-description: "Branch naming (repositories with a remote; the vault commits on main while it has none), explicit file staging, pre-commit gate execution, and atomic commits. Use when creating a branch, staging changes, or committing work ('commit', 'tạo nhánh', 'lưu vào git')."
+description: "Branch naming (every repository works by branch and PR), explicit file staging, pre-commit gate execution, and atomic commits. Use when creating a branch, staging changes, or committing work ('commit', 'tạo nhánh', 'lưu vào git')."
 ---
 
 # `nhanh-va-commit` — Branching, Pre-Commit Gates & Atomic Commits
 
 ## 1. Branch Naming Convention
 
-**Vault (`D:\AureLysn`):** while the repository has no remote (`HT-043`), do not create a branch; commit on `main` (`git-an-toan` §1.3) and go to §2. The naming below is for repositories with a remote, and for a vault branch Aurel asks for.
+**All repositories** (the vault root, `05_Evasion/`, `04_Portfolio/`, `Atelier`, `AureLysnOS`): no commit on `main`; every change is made on a branch and returns through a PR (`git-an-toan` §1.3, Aurel 2026-11-14).
 
-When creating a branch (inside an external worktree for `D:\AureLysn`, or directly in standalone repos):
+When creating a branch (inside an external worktree for the three vault repositories, or directly in the app repositories):
 - Format: `<type>/<short-kebab-slug>`
   - `feat/<slug>` — new feature, project, or subsystem capability
   - `fix/<slug>` — bug fix, broken link repair, or gate fix

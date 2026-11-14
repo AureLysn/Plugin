@@ -10,7 +10,7 @@ General-purpose Git safety plugin for **all repositories** on Aurel's workstatio
 |---|---|
 | `git-an-toan` | Pre-flight Git inspection, `.git/index.lock` checks, line-ending protection, worktree placement outside the main tree, and destructive-command prohibitions |
 | `nhanh-va-commit` | Branch naming (`loai/mo-ta-ngan`), explicit file staging (never `git add -A`), pre-commit gate execution when `AGENTS.md` + `01_Origine/` exist, and `git diff --stat` line-ending verification |
-| `pr-va-merge` | Only for a repository with a remote (the vault has none yet, `HT-043`; it commits on `main`). Pushing feature branches, opening GitHub PRs via `gh`, inspecting CI checks, and merging safely without mutating the main working tree |
+| `pr-va-merge` | For all five repositories, once at the close of a session (Aurel, 2026-11-14). Pushing feature branches, opening GitHub PRs via `gh`, inspecting CI checks, and merging safely without mutating the main working tree |
 | `git-cuu-ho` | Recovering from mid-session Git faults: stale `index.lock`, wrong-branch commits, CRLF/LF full-file diffs, merge conflicts, and `git reflog` recovery |
 
 ---

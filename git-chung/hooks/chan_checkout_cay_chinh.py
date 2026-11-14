@@ -1,6 +1,6 @@
 ﻿#!/usr/bin/env python3
 """PreToolUse hook (Bash): block branch switching (`git checkout <branch>`, `git switch`, `gh pr checkout`)
-on the main vault tree (`D:\\AureLysn`).
+on a main tree of the vault (`D:\\AureLysn`, and the nested repositories `05_Evasion` and `04_Portfolio`).
 
 Why: The main vault tree stays on `main` while Obsidian is open. Switching branches on the main
 tree mutates files under Obsidian and collides with concurrent sessions. Parallel branch work must
@@ -23,7 +23,7 @@ try:
 except Exception:
     pass
 
-CAY_CHINH = {"d:/aurelysn"}
+CAY_CHINH = {"d:/aurelysn", "d:/aurelysn/05_evasion", "d:/aurelysn/04_portfolio"}
 
 HEREDOC = re.compile(r"<<-?\s*['\"]?(\w+)['\"]?.*?\n\1\b", re.S)
 QUOTED = re.compile(r'"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\'')

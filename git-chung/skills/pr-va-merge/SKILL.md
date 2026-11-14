@@ -1,6 +1,6 @@
 ---
 name: pr-va-merge
-description: "Push feature branches, open GitHub Pull Requests via gh CLI, verify CI checks, merge into main, and clean up worktrees, in a repository that has a remote (the vault has none yet). Use when user asks to 'tạo PR', 'merge nhánh', 'gộp vào main', 'push lên GitHub', or clean up after a PR."
+description: "Push feature branches, open GitHub Pull Requests via gh CLI, verify CI checks, merge into main, and clean up worktrees, in any of the vault or app repositories. Use when user asks to 'tạo PR', 'merge nhánh', 'gộp vào main', 'push lên GitHub', or clean up after a PR."
 ---
 
 # `pr-va-merge` — Pull Request Creation, Merge & Worktree Cleanup
@@ -8,8 +8,9 @@ description: "Push feature branches, open GitHub Pull Requests via gh CLI, verif
 ## 0. Where This Skill Applies
 
 - It needs a remote named `origin` and the `gh` CLI. Check first: `git remote -v`.
-- **The vault repository (`D:\AureLysn`) has no remote** (open item `HT-043`). Until Aurel connects one, this skill does not apply there: vault work is committed on `main` (`git-an-toan` §1.3, `nhanh-va-commit`). If asked to "tạo PR" or "push" for the vault, say that there is no remote and stop; do not add one without Aurel's word.
-- The `D:/AureLysn` lines in §3 describe the vault once it has a remote; for another repository, use its own main tree.
+- It applies to all five repositories (`git-an-toan` §1.3): the vault root, `05_Evasion/`, `04_Portfolio/`, `Atelier` and `AureLysnOS`.
+- **When:** once, at the close of the session, after the gates pass (`git-an-toan` §1.4) — not after each commit.
+- The `D:/AureLysn` lines in §3 are written for the root repository; for another repository, use its own main tree (`D:/AureLysn/05_Evasion`, `D:/AureLysn/04_Portfolio`, or the app folder).
 
 ---
 
