@@ -1,0 +1,39 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "aurelysn-vault",
+  "version": "1.1.0",
+  "description": "Local plugin marketplace for AureLysn Vault (D:\\AureLysn) — Git safety, system administration, storage sidecars, and fiction continuation studio",
+  "owner": {
+    "name": "Aurel"
+  },
+  "plugins": [
+    {
+      "name": "git-chung",
+      "description": "Safe Git operations across all repositories (AureLysn Vault, Portfolio, and Subsystems): branch & commit discipline, PR & merge, history recovery, and 5 PreToolUse safety hooks",
+      "version": "0.5.0",
+      "source": "./git-chung",
+      "category": "development"
+    },
+    {
+      "name": "quan-ly-he-thong",
+      "description": "System administration for AureLysn Vault: verification gates (vault_doctor, vault_index, claim_check), 3-2-1 zip snapshots, session handoffs, pre-handoff verification checklist updates, and stale-index commit blocking",
+      "version": "0.7.6",
+      "source": "./quan-ly-he-thong",
+      "category": "productivity"
+    },
+    {
+      "name": "quan-ly-kho",
+      "description": "Binary storage and sidecar management for 02_Storage/ and 03_Atelier/02_Asset_Catalog/: asset scanning, sidecar authoring, path_rel verification, and safe file archiving",
+      "version": "0.1.3",
+      "source": "./quan-ly-kho",
+      "category": "productivity"
+    },
+    {
+      "name": "xuong-viet-tiep-truyen",
+      "description": "Fiction continuation and original story studio for 05_Evasion/01_Oeuvre/: source ingestion, entity extraction, style profiling, drop-point analysis, 7-gate outline planning, chapter drafting, blind continuity/POV verification, and 6-step finalization",
+      "version": "0.15.0",
+      "source": "./xuong-viet-tiep-truyen",
+      "category": "writing"
+    }
+  ]
+}

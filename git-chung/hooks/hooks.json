@@ -1,0 +1,31 @@
+﻿{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "run_command|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PLUGIN_ROOT}/hooks/chan_git_mv.py\""
+          },
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PLUGIN_ROOT}/hooks/chan_sed_i.py\""
+          },
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PLUGIN_ROOT}/hooks/chan_nhap_temp.py\""
+          },
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PLUGIN_ROOT}/hooks/chan_exit_sau_ong.py\""
+          },
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PLUGIN_ROOT}/hooks/chan_checkout_cay_chinh.py\""
+          }
+        ]
+      }
+    ]
+  }
+}
