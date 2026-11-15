@@ -1,6 +1,6 @@
 {
   "name": "xuong-viet-tiep-truyen",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "Fiction continuation and original story studio for 05_Evasion/01_Oeuvre/: source ingestion, entity extraction, style profiling, drop-point analysis, 7-gate outline planning, chapter drafting, blind continuity/POV verification, and 6-step finalization",
   "author": {
     "name": "Aurel"
