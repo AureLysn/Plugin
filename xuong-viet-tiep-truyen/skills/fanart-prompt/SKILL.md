@@ -5,7 +5,7 @@ description: "Generate structured, source-grounded image generation prompts from
 
 # `fanart-prompt` — Grounded Visual Prompt Generation
 
-## 1. Provenance Tagging Invariant (`[[AGENTS]]` Invariant 5)
+## 1. Provenance Tagging Invariant (`[[CLAUDE]]` Invariant 5)
 
 Every visual detail in the prompt must be tagged inline so Aurel can immediately distinguish canonical character appearance from AI invention:
 - **`[note]`:** Verified attribute from a vault character, costume, or scene note (cite note).

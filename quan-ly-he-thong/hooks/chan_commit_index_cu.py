@@ -1,10 +1,16 @@
 ﻿#!/usr/bin/env python3
-"""PreToolUse hook (Bash): block `git commit` when the vault search index is stale.
+"""PreToolUse hook (Bash): block `git commit` when the index of the repository being committed is stale.
 
 Why: If an agent edits a note (such as `session-handoff.md` or a rule note) AFTER running
-`vault_index.py --build`, committing immediately leaves `vault-index.json` out of sync with
-the notes on disk. This hook intercepts `git commit` inside the vault and runs
-`vault_index.py --check` whenever any indexed `.md` file is staged.
+`vault_index.py --build`, committing immediately leaves the index out of sync with the notes
+on disk. This hook intercepts `git commit`, finds the Git repository the commit lands in, and
+when that repository holds an index (see REPO_INDEX) and has a staged `.md` file or its index
+file staged, runs `vault_index.py --check` and blocks only if THAT repository's index is stale.
+
+Repositories (Aurel, 2026-11-23, HT-043):
+  vault root   -> 01_Origine/05_Meta/Index/vault-index.json        (root 1)
+  05_Evasion/  -> 05_Evasion/01_Oeuvre/System/runtime/index.json  (root 2, fiction)
+  any other repository (04_Portfolio/, app repositories) has no index and is skipped.
 
 Exit 0 = allow, 2 = block (stderr shown to Claude).
 """
@@ -26,15 +32,16 @@ except Exception:
 HEREDOC = re.compile(r"<<-?\s*['\"]?(\w+)['\"]?.*?\n\1\b", re.S)
 QUOTED = re.compile(r'"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\'')
 SPLIT_SEG = re.compile(r"(?:;|&&|\|\||&|\n)+")
-CD_CMD = re.compile(r"^\s*(?:cd|pushd|Set-Location|sl)\s+(?:/d\s+)?(\"[^\"]+\"|'[^']+'|\S+)", re.I)
+CD_CMD = re.compile(r"^\s*(?:cd|pushd|Push-Location|Set-Location|sl)\s+(?:-Path\s+|-LiteralPath\s+)?(?:/d\s+)?(\"[^\"]+\"|'[^']+'|\S+)", re.I)
 GIT_C = re.compile(r"\bgit\s+-C\s+(\"[^\"]+\"|'[^']+'|\S+)")
 GIT_COMMIT = re.compile(r"\bgit\b(?:\s+-C\s+\S+)*\s+commit\b")
 COMMIT_HELP = re.compile(r"\s(?:-h|--help)\b")
 COMMIT_ALL = re.compile(r"\s(?:-[a-zA-Z]*a[a-zA-Z]*|--all)\b")
-INDEX_JSON = {
-    "01_Origine/05_Meta/Index/vault-index.json",
-    "05_Evasion/01_Oeuvre/System/runtime/index.json",
-    "60_Personal/fiction/System/runtime/index.json",
+# Repository path relative to the vault root ("" = the vault root repository) -> its index,
+# relative to the vault root (this is also how `vault_index.py --check` names it).
+REPO_INDEX = {
+    "": "01_Origine/05_Meta/Index/vault-index.json",
+    "05_Evasion": "05_Evasion/01_Oeuvre/System/runtime/index.json",
 }
 
 INDEX_SCRIPT_CANDIDATES = (
@@ -56,16 +63,29 @@ def find_vault(start: Path) -> tuple[Path, Path] | None:
     except OSError:
         cur = start
     for c in [cur, *cur.parents]:
-        if (c / "AGENTS.md").is_file():
+        if (c / "CLAUDE.md").is_file():
             for rel in INDEX_SCRIPT_CANDIDATES:
                 if (c / rel).is_file():
                     return c, c / rel
     return None
 
 
-def staged_files(vault: Path) -> list[str]:
+def repo_top(start: Path) -> Path | None:
+    """Top folder of the Git repository that contains `start` (None if not a repository)."""
+    if not start.is_dir():
+        return None
     r = subprocess.run(
-        ["git", "-C", str(vault), "diff", "--cached", "--name-only"],
+        ["git", "-C", str(start), "rev-parse", "--show-toplevel"],
+        capture_output=True, text=True, encoding="utf-8", errors="replace",
+    )
+    if r.returncode != 0 or not r.stdout.strip():
+        return None
+    return norm_win(r.stdout.strip())
+
+
+def staged_files(repo: Path) -> list[str]:
+    r = subprocess.run(
+        ["git", "-C", str(repo), "diff", "--cached", "--name-only"],
         capture_output=True, text=True, encoding="utf-8", errors="replace",
     )
     if r.returncode != 0:
@@ -73,14 +93,24 @@ def staged_files(vault: Path) -> list[str]:
     return [ln.strip().replace("\\", "/") for ln in r.stdout.splitlines() if ln.strip()]
 
 
-def modified_tracked(vault: Path) -> list[str]:
+def modified_tracked(repo: Path) -> list[str]:
     r = subprocess.run(
-        ["git", "-C", str(vault), "diff", "--name-only", "HEAD"],
+        ["git", "-C", str(repo), "diff", "--name-only", "HEAD"],
         capture_output=True, text=True, encoding="utf-8", errors="replace",
     )
     if r.returncode != 0:
         return []
     return [ln.strip().replace("\\", "/") for ln in r.stdout.splitlines() if ln.strip()]
+
+
+def repo_key(vault: Path, repo: Path) -> str | None:
+    """Path of `repo` relative to `vault` in posix form ("" for the vault root)."""
+    try:
+        rel = repo.resolve().relative_to(vault.resolve())
+    except (OSError, ValueError):
+        return None
+    key = rel.as_posix()
+    return "" if key == "." else key
 
 
 def check_cmd(cmd: str, cwd: str) -> str | None:
@@ -106,14 +136,22 @@ def check_cmd(cmd: str, cwd: str) -> str | None:
             cand = norm_win(m_c.group(1))
             target_dir = cand if cand.is_absolute() else (cur_dir / cand)
 
-        found = find_vault(target_dir)
+        repo = repo_top(target_dir)
+        if repo is None:
+            continue
+        found = find_vault(repo)
         if not found:
             continue
         vault, idx_script = found
+        key = repo_key(vault, repo)
+        if key not in REPO_INDEX:
+            continue  # repository without an index (04_Portfolio/, apps)
+        index_vault_rel = REPO_INDEX[key]
+        index_repo_rel = index_vault_rel[len(key) + 1:] if key else index_vault_rel
 
-        files = modified_tracked(vault) if COMMIT_ALL.search(seg_clean) else staged_files(vault)
+        files = modified_tracked(repo) if COMMIT_ALL.search(seg_clean) else staged_files(repo)
         has_md = any(f.lower().endswith(".md") for f in files)
-        has_idx = any(f in INDEX_JSON for f in files)
+        has_idx = index_repo_rel in files
         if not (has_md or has_idx):
             continue
 
@@ -122,16 +160,23 @@ def check_cmd(cmd: str, cwd: str) -> str | None:
             cwd=str(vault), capture_output=True, text=True,
             encoding="utf-8", errors="replace",
         )
-        if r.returncode != 0:
-            detail = (r.stdout + r.stderr).strip()
-            rel_script = idx_script.relative_to(vault).as_posix()
-            return (
-                "CHẶN: không `git commit` khi index của vault đang CŨ so với note trên đĩa.\n"
-                f"{detail}\n"
-                "  Cách sửa (chạy SAU CÙNG trước khi commit):\n"
-                f"    python {rel_script} --build --include-fiction\n"
-                "    git add 01_Origine/05_Meta/Index/vault-index.json"
-            )
+        if r.returncode == 0:
+            continue
+        detail = (r.stdout + r.stderr).strip()
+        # `--check` reports each stale index on a line that starts with its path;
+        # block only when the stale one belongs to this repository.
+        stale_here = any(ln.strip().startswith(index_vault_rel + ":") for ln in detail.splitlines())
+        if not stale_here:
+            continue
+        rel_script = idx_script.relative_to(vault).as_posix()
+        add_cmd = f"git -C {key} add {index_repo_rel}" if key else f"git add {index_repo_rel}"
+        return (
+            f"CHẶN: không `git commit` khi index của repo này ({index_vault_rel}) đang CŨ so với note trên đĩa.\n"
+            f"{detail}\n"
+            "  Cách sửa (chạy SAU CÙNG trước khi commit, từ gốc vault):\n"
+            f"    python {rel_script} --build --include-fiction\n"
+            f"    {add_cmd}"
+        )
     return None
 
 

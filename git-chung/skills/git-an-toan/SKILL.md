@@ -29,7 +29,7 @@ git worktree list
 
 | Forbidden Action | Hook | Required Alternative |
 |---|---|---|
-| `git mv` on `.md` notes | `chan_git_mv.py` | Rename inside Obsidian, or update all inbound wikilinks, add the old stem to `aliases:`, and run `vault_doctor.py` (`[[AGENTS]]` Invariant 10) |
+| `git mv` on `.md` notes | `chan_git_mv.py` | Rename inside Obsidian, or update all inbound wikilinks, add the old stem to `aliases:`, and run `vault_doctor.py` (`[[CLAUDE]]` Invariant 10) |
 | `sed -i` / `sed --in-place` | `chan_sed_i.py` | Use `Edit` for single files or `vaultlib.write_keep_eol()` in Python (`[[ai-tool-and-environment-quirks]]`) |
 | Temp scripts in `$TEMP` / `/tmp` | `chan_nhap_temp.py` | Put reusable scripts in `01_Origine/04_Tools/VaultTool/` or run `python -c "..."` |
 | `<gate> \| tail; echo $?` | `chan_exit_sau_ong.py` | Run the gate without piping, or use `set -o pipefail` / `${PIPESTATUS[0]}` |
@@ -43,7 +43,7 @@ Never execute any of the following without Aurel's explicit confirmation in the 
 - `git reset --hard`, `git checkout -- .`, `git restore .`, `git clean -fd`
 - `git push --force` or `git push --force-with-lease`
 - `git branch -D <branch>` on unmerged branches
-- `rm` on any vault note or storage file (move to `_to_delete/<YYYY-MM-DD>/` instead — `[[AGENTS]]` Invariant 3)
+- `rm` on any vault note or storage file (move to `_to_delete/<YYYY-MM-DD>/` instead — `[[CLAUDE]]` Invariant 3)
 
 ---
 

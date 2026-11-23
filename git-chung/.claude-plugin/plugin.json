@@ -1,6 +1,6 @@
 {
   "name": "git-chung",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Safe Git operations across all repositories (D:\\AureLysn, Portfolio, Subsystems): branch & commit discipline, PR & merge, history recovery, and 5 PreToolUse safety hooks",
   "author": {
     "name": "Aurel"

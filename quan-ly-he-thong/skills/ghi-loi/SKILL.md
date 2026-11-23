@@ -23,7 +23,7 @@ description: "Convert a discovered AI tool quirk, gate blind spot, or workflow f
 
 ## 2. Procedure
 
-1. Read the target file (`[[pre-handoff-verification-checklist]]` or `[[ai-tool-and-environment-quirks]]`) before editing (`[[AGENTS]]` Invariant 4).
+1. Read the target file (`[[pre-handoff-verification-checklist]]` or `[[ai-tool-and-environment-quirks]]`) before editing (`[[CLAUDE]]` Invariant 4).
 2. State the failure mechanism concisely: **Symptom → Root cause → Deterministic check/hook that catches it**.
 3. If a hook or gate script was modified, run its unit test suite (`test_chan_*.py` or `test_claim_check.py`) and verify `exit 0` (`executed`).
 4. Rebuild the index (`vault_index.py --build --include-fiction`) and run `vault_doctor.py --include-fiction`.

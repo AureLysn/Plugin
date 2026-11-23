@@ -9,7 +9,7 @@ General-purpose Git safety plugin for **all repositories** on Aurel's workstatio
 | Skill | Purpose |
 |---|---|
 | `git-an-toan` | Pre-flight Git inspection, `.git/index.lock` checks, line-ending protection, worktree placement outside the main tree, and destructive-command prohibitions |
-| `nhanh-va-commit` | Branch naming (`loai/mo-ta-ngan`), explicit file staging (never `git add -A`), pre-commit gate execution when `AGENTS.md` + `01_Origine/` exist, and `git diff --stat` line-ending verification |
+| `nhanh-va-commit` | Branch naming (`loai/mo-ta-ngan`), explicit file staging (never `git add -A`), pre-commit gate execution when `CLAUDE.md` + `01_Origine/` exist, and `git diff --stat` line-ending verification |
 | `pr-va-merge` | For all five repositories, once at the close of a session (Aurel, 2026-11-14). Pushing feature branches, opening GitHub PRs via `gh`, inspecting CI checks, and merging safely without mutating the main working tree |
 | `git-cuu-ho` | Recovering from mid-session Git faults: stale `index.lock`, wrong-branch commits, CRLF/LF full-file diffs, merge conflicts, and `git reflog` recovery |
 
@@ -21,7 +21,7 @@ Every hook intercepts `Bash` tool calls before execution (`exit 0` = allow, `exi
 
 | Hook Script | Test Suite | What It Blocks & Why |
 |---|---|---|
-| `hooks/chan_git_mv.py` | `hooks/test_chan_git_mv.py` | Blocks `git mv` on Markdown notes (`*.md`) — renaming outside Obsidian leaves inbound wikilinks pointing to the old filename (`[[10-skill-authoring]]` · `[[AGENTS]]` Invariant 10). |
+| `hooks/chan_git_mv.py` | `hooks/test_chan_git_mv.py` | Blocks `git mv` on Markdown notes (`*.md`) — renaming outside Obsidian leaves inbound wikilinks pointing to the old filename (`[[10-skill-authoring]]` · `[[CLAUDE]]` Invariant 10). |
 | `hooks/chan_sed_i.py` | `hooks/test_chan_sed_i.py` | Blocks `sed -i` / `sed --in-place` — Git Bash `sed -i` strips `CR` on Windows, turning a 3-line edit into a full-file diff in a repository that does not normalise line endings (the vault's `.gitattributes` stores six text types as `LF`) (`[[ai-tool-and-environment-quirks]]`). |
 | `hooks/chan_nhap_temp.py` | `hooks/test_chan_nhap_temp.py` | Blocks creating or executing temporary scripts inside `$TEMP`, `/tmp` or `AppData/Local/Temp`. The session scratchpad (a path with a `scratchpad` folder) is allowed; that is where scratch scripts go (Aurel, 2026-11-13). |
 | `hooks/chan_exit_sau_ong.py` | `hooks/test_chan_exit_sau_ong.py` | Blocks piping a command into a filter followed by `; echo $?` (`cmd \| tail; echo $?`), which prints the filter's exit code (`0`) and hides gate failures (`exit 2`). |

@@ -24,5 +24,5 @@ description: "Verify all asset and source sidecars across the vault using asset_
 2. If `[PATH_REL RONG]` appears:
    - Check whether the drive declared in `[[stores]]` is mounted (`claim_check.py --no-scan`).
    - If the binary file was renamed or moved inside its store, update `asset.path_rel` (and `asset.store` if moved across branches) in the sidecar note.
-   - Never delete a broken sidecar silently (`[[AGENTS]]` Invariant 3).
+   - Never delete a broken sidecar silently (`[[CLAUDE]]` Invariant 3).
 - Include `- Used: kiem-sidecar` in the handoff block.

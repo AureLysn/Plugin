@@ -12,7 +12,7 @@ description: "Drive a project's sequential task queue (hang-doi.json via giao_vi
 - **Stop Conditions:** Stop immediately and alert Aurel when:
   - An arc gate or human-review checkpoint is reached.
   - A job fails past `config.max_attempts`.
-  - A canon or premise question arises that only Aurel can decide (`[[AGENTS]]` §2).
+  - A canon or premise question arises that only Aurel can decide (`[[CLAUDE]]` §2).
 
 ---
 

@@ -8,7 +8,7 @@ description: "Build the setting, characters, factions, and rules for a brand-new
 ## 1. Creative Stance vs Archivist Stance
 
 - **`extract-entities`** is an archivist: it extracts existing text and refuses to invent.
-- **`worldbuild-original`** is creative synthesis: inventing **is** the job, but **nothing is locked until Aurel approves** (`[[AGENTS]]` §2).
+- **`worldbuild-original`** is creative synthesis: inventing **is** the job, but **nothing is locked until Aurel approves** (`[[CLAUDE]]` §2).
 - **Schema Compatibility:** Produces identical note types and folders as `extract-entities` (`02_Story_Bible/characters/`, `02_Story_Bible/locations/`, `02_Story_Bible/organizations/`, `02_Story_Bible/world-rules/`, `02_Story_Bible/secrets/`, `03_Development/tracker/`) so `plan-continuation`, `write-chapter`, `check-continuity`, and `finalize-chapter` operate without modification.
 
 ---

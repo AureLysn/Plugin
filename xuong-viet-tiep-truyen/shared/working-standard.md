@@ -4,7 +4,7 @@ Mandatory operating rules for every skill and subagent in **`xuong-viet-tiep-tru
 
 ---
 
-## 1. Language Boundary (`[[AGENTS]]` & `[[12-user-profile]]`)
+## 1. Language Boundary (`[[CLAUDE]]` & `[[12-user-profile]]`)
 
 1. **System & schema documents (`01_Origine/`):** English.
 2. **Conversation with Aurel:** Vietnamese (`Mình` ↔ `Aurel` / `bạn`).
@@ -25,7 +25,7 @@ Mandatory operating rules for every skill and subagent in **`xuong-viet-tiep-tru
    authority: original_author  # original_author | franchise | fandom | user | ai
    confidence: 0.95            # authority: ai can NEVER have confidence: 1.0
    ```
-2. **Distinguish `planned` from `occurred` (`[[AGENTS]]` Invariant 7):**
+2. **Distinguish `planned` from `occurred` (`[[CLAUDE]]` Invariant 7):**
    - Outlines (`type: chapter_plan`, `status: planned`) and draft chapters (`status: draft`) are **not** canon history.
    - Only events from chapters with `status: final` (`status: occurred`) update character state or pay off hooks (`[[07-state]]`).
 
@@ -36,6 +36,7 @@ Mandatory operating rules for every skill and subagent in **`xuong-viet-tiep-tru
 When extracting entities, tropes, or canon from a multi-chapter source:
 - Maintain the reading ledger in the source note (`01_Project-canon/sources/<source>.md`, coverage section; `sources/_MOC.md` when one source spans several notes) recording exact chapter ranges read (`executed` / `inspected`), word counts, and extracted notes.
 - Never claim "read all chapters" if only a sample or grep search was run.
+- **Web novel sites (wikicv.org, convert sites and similar):** read one chapter at a time with a pause between pages. Open the table of contents, then only the chapters needed; to search by keyword, ask Aurel which chapters first. Never fetch dozens of chapters in a row from the browser: on 2026-11-17 a scan of about 70 parts got Aurel's own IP blocked by wikicv.org (Cloudflare 1006). These sites block bots, and the block falls on Aurel's IP. *(Moved here from session memory on 2026-11-23, Aurel: story rules load only for story work.)*
 
 ---
 

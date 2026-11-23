@@ -18,7 +18,7 @@ CASES = [
     ("gh pr checkout 42", "D:\\AureLysn", 2, "gh pr checkout trên cây chính"),
     ("git -C D:/AureLysn checkout feat/x", "D:\\Other", 2, "git -C trỏ vào cây chính"),
     ("cd D:/AureLysn && git checkout feat/x", "D:\\Other", 2, "cd vào cây chính rồi checkout"),
-    ("git checkout -- AGENTS.md", "D:\\AureLysn", 0, "khôi phục 1 file có -- được phép"),
+    ("git checkout -- CLAUDE.md", "D:\\AureLysn", 0, "khôi phục 1 file có -- được phép"),
     ("git checkout HEAD -- 01_Origine/a.md", "D:\\AureLysn", 0, "checkout HEAD -- file được phép"),
     ("git checkout -b feat/test", "D:\\AureLysn-wt\\test", 0, "checkout trong worktree ngoài được phép"),
     ("cd D:/AureLysn-wt/test && git checkout -b feat/x", "D:\\AureLysn", 0, "cd sang worktree rồi checkout được phép"),

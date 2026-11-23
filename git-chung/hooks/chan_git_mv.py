@@ -2,7 +2,7 @@
 """PreToolUse hook (Bash): block git mv on Markdown notes (.md).
 
 Renaming a vault note via `git mv` updates the filename on disk without updating
-inbound `[[wikilinks]]` across the vault (AGENTS.md Invariant 10).
+inbound `[[wikilinks]]` across the vault (CLAUDE.md Invariant 10).
 
 Exit 0 = allow, 2 = block (stderr shown to Claude).
 """
@@ -39,7 +39,7 @@ def check(cmd: str) -> str | None:
         raw_tail = cmd[start:start + 400].splitlines()[0]
         if re.search(r"\.md\b", raw_tail, re.I):
             return (
-                "CHẶN: không dùng `git mv` trên note `.md` (AGENTS.md bất biến 10).\n"
+                "CHẶN: không dùng `git mv` trên note `.md` (CLAUDE.md bất biến 10).\n"
                 "  Đổi tên bằng git không cập nhật wikilink trỏ tới file đó.\n"
                 "  Cách đúng:\n"
                 "    1. Đổi tên trong Obsidian (tự sửa mọi wikilink), HOẶC\n"

@@ -23,7 +23,7 @@ You are a single-role execution subagent for **`05_Evasion/01_Oeuvre/`** in `D:\
 2. **POV & Continuity Firewall (`[[05-visibility]]` · `[[04-lanes]]`):**
    - Never leak facts from `02_Story_Bible/secrets/` notes where the scene's `pov` character is listed in `unknown_to`, or in none of `known_by` / `suspected_by` / `unknown_to` ([[05-visibility]]).
    - Never write project-specific facts into `05_Evasion/01_Oeuvre/Database/Fandom/<UNIVERSE>/`.
-3. **Preserve Line Endings & Provenance (`[[AGENTS]]` Invariants 4, 5, 10):**
+3. **Preserve Line Endings & Provenance (`[[CLAUDE]]` Invariants 4, 5, 10):**
    - Read every existing note before modifying it.
    - Use `vaultlib.write_keep_eol()` when updating files via Python.
 

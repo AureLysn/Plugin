@@ -21,7 +21,7 @@ description: "Analyze genre conventions, trope expectations, and reader promises
    - **Obligatory Scenes & Payoffs:** Which genre beats must occur for the continuation to feel authentic (`[[setup-and-payoff]]`)?
    - **Hard Anti-Tropes (`forbid`):** Which tropes or tone shifts would betray the original work's promise?
 2. **Record in `<Project>/00_Overview/` (or `03_Development/arcs/`):**
-   Write or update the trope & genre analysis note with explicit `source.ref` citations to chapters and author notes (`[[AGENTS]]` Invariant 5).
+   Write or update the trope & genre analysis note with explicit `source.ref` citations to chapters and author notes (`[[CLAUDE]]` Invariant 5).
 3. **Rebuild index and verify links:**
    ```bash
    python 01_Origine/04_Tools/VaultTool/Core/vault_index.py --build --include-fiction
