@@ -1,0 +1,8 @@
+{
+  "name": "storekeeper",
+  "version": "0.2.0",
+  "description": "Binary storage and sidecar management for 02_Storage/ and 03_Atelier/02_Asset_Catalog/: asset scanning, sidecar authoring, path_rel verification, and safe file archiving",
+  "author": {
+    "name": "Aurel"
+  }
+}

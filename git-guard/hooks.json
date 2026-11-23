@@ -1,0 +1,35 @@
+﻿{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "run_command|Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python hooks/chan_git_mv.py"
+          },
+          {
+            "type": "command",
+            "command": "python hooks/chan_sed_i.py"
+          },
+          {
+            "type": "command",
+            "command": "python hooks/chan_nhap_temp.py"
+          },
+          {
+            "type": "command",
+            "command": "python hooks/chan_exit_sau_ong.py"
+          },
+          {
+            "type": "command",
+            "command": "python hooks/chan_checkout_cay_chinh.py"
+          },
+          {
+            "type": "command",
+            "command": "python hooks/chan_git_pha_huy.py"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "design-review",
+  "version": "0.1.0",
+  "description": "Read-only design and portfolio audit for 03_Atelier/ and 04_Portfolio/ against Style DNA core and WCAG 2.2 AA contrast (subagent art-auditor)",
+  "author": {
+    "name": "Aurel"
+  }
+}

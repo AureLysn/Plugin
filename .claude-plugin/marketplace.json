@@ -1,39 +1,46 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "aurelysn-vault",
-  "version": "1.4.0",
-  "description": "Local plugin marketplace for AureLysn Vault (D:\\AureLysn) — Git safety, system administration, storage sidecars, and fiction continuation studio",
+  "version": "2.0.0",
+  "description": "Local plugin marketplace for AureLysn Vault (D:\\AureLysn) — Git safety, system administration, storage sidecars, fiction continuation studio, and design review",
   "owner": {
     "name": "Aurel"
   },
   "plugins": [
     {
-      "name": "git-chung",
-      "description": "Safe Git operations across all repositories (AureLysn Vault, Portfolio, and Subsystems): branch & commit discipline, PR & merge, history recovery, and 5 PreToolUse safety hooks",
-      "version": "0.5.1",
-      "source": "./git-chung",
+      "name": "git-guard",
+      "description": "Safe Git operations across all repositories (AureLysn Vault, Portfolio, and Subsystems): branch & commit discipline, PR & merge, history recovery, and 6 PreToolUse safety hooks (Bash + PowerShell)",
+      "version": "0.7.0",
+      "source": "./git-guard",
       "category": "development"
     },
     {
-      "name": "quan-ly-he-thong",
+      "name": "vault-ops",
       "description": "System administration for AureLysn Vault: verification gates (vault_doctor, vault_index, claim_check), 3-2-1 zip snapshots, session handoffs, pre-handoff verification checklist updates, and stale-index commit blocking",
-      "version": "0.8.0",
-      "source": "./quan-ly-he-thong",
+      "version": "0.9.0",
+      "source": "./vault-ops",
       "category": "productivity"
     },
     {
-      "name": "quan-ly-kho",
+      "name": "storekeeper",
       "description": "Binary storage and sidecar management for 02_Storage/ and 03_Atelier/02_Asset_Catalog/: asset scanning, sidecar authoring, path_rel verification, and safe file archiving",
-      "version": "0.1.4",
-      "source": "./quan-ly-kho",
+      "version": "0.2.0",
+      "source": "./storekeeper",
       "category": "productivity"
     },
     {
-      "name": "xuong-viet-tiep-truyen",
+      "name": "story-studio",
       "description": "Fiction continuation and original story studio for 05_Evasion/01_Oeuvre/: source ingestion, entity extraction, style profiling, drop-point analysis, 7-gate outline planning, chapter drafting, blind continuity/POV verification, and 6-step finalization",
-      "version": "0.17.1",
-      "source": "./xuong-viet-tiep-truyen",
+      "version": "0.18.0",
+      "source": "./story-studio",
       "category": "writing"
+    },
+    {
+      "name": "design-review",
+      "description": "Read-only design and portfolio audit for 03_Atelier/ and 04_Portfolio/ against Style DNA core and WCAG 2.2 AA contrast (subagent art-auditor)",
+      "version": "0.1.0",
+      "source": "./design-review",
+      "category": "design"
     }
   ]
 }
