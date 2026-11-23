@@ -7,7 +7,7 @@ description: "End-of-session handoff procedure: measure live vault state, update
 
 ## 1. Preconditions & Target Files
 
-- Authoritative workflow: `[[session-handoff-workflow]]` (its table is the home of this procedure; this skill adds the commands), `[[09-gates]]`, `[[AGENTS]]` Invariants 11 & 12.
+- Authoritative workflow: `[[session-handoff-workflow]]` (its table is the home of this procedure; this skill adds the commands), `[[09-gates]]`, `[[CLAUDE]]` Invariants 11 & 12.
 - Target files:
   - `06_Station/01_Daily_Logs/session-handoff.md` (`[[session-handoff]]`)
   - `06_Station/02_Dashboards/open-items-dashboard.md` (`[[open-items-dashboard]]`)
@@ -16,11 +16,12 @@ description: "End-of-session handoff procedure: measure live vault state, update
 
 ## 2. Five-Step Handoff Sequence
 
-1. **Read current handoff and dashboard files first (`[[AGENTS]]` Invariant 4):**
+1. **Read current handoff and dashboard files first (`[[CLAUDE]]` Invariant 4):**
    Read `06_Station/01_Daily_Logs/session-handoff.md` and `06_Station/02_Dashboards/open-items-dashboard.md` before making edits.
 2. **Update open items (`[[open-items-dashboard]]`):**
    - Mark completed items as resolved (with date and verification evidence).
-   - Add any newly discovered open items under the correct prefix (`KH-`, `PF-`, `HT-`, `TD-`/`AP-`, `TR-`).
+   - Add any newly discovered **system** open items under the correct prefix (`KH-`, `HT-`, `TD-`/`AP-`).
+   - **Project items never go on the dashboard or into `session-handoff`** (Aurel, 2026-11-23): Portfolio items go to `01_Origine/01_Identity/Portfolio_Plan/viec-mo-portfolio.md` (`PF-`); a story project's items go to `05_Management/viec-mo.md` inside that project (`TR-`, create the note if missing). They are read only when working on that project.
 3. **Rewrite `[[session-handoff]]` in full, never append (`06_Station/01_Daily_Logs/session-handoff.md`):**
    - Record what was completed in the current session, which files were created/modified, measured gate statuses (`executed` / `inspected` / `assumed`), and the prioritized next steps.
    - Preserve `last_updated: YYYY-MM-DD` and original line endings (`LF`/`CRLF`).

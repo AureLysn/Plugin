@@ -24,5 +24,5 @@ Every trope map note (`type: info`, `canon_layer: fanon`, `authority: fandom`) m
 3. **Expected Reader Beats:** Obligatory moments reader expectations demand (`[[setup-and-payoff]]`).
 4. **Clichés & Fatigue Points:** Tropes the community considers overused or lazy.
 5. **Subversion Directions:** Innovative ways authors have bent or inverted the genre.
-6. **Evidence Labels (`[[AGENTS]]` Invariant 11):** Label every frequency assertion as `measured` (with tag count and date), `sourced` (citing Fanlore/TV Tropes), or `impression`.
+6. **Evidence Labels (`[[CLAUDE]]` Invariant 11):** Label every frequency assertion as `measured` (with tag count and date), `sourced` (citing Fanlore/TV Tropes), or `impression`.
 - Include `- Used: research-genre` in the handoff block.

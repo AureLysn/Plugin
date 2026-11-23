@@ -49,5 +49,5 @@ python 01_Origine/04_Tools/VaultTool/Organization/asset_scan.py --check
 
 - `0` = Clean (`Pass`)
 - `1` = Non-blocking `Warning` (inspect to confirm no new warning was introduced)
-- `2` = Blocking `Error` (**STOP** — fix all errors and re-run before reporting completion; see `[[AGENTS]]` §2)
-- Label all reported counts as `executed` (`[[AGENTS]]` Invariant 11) and include `- Used: kiem-tra-he-thong` in the handoff block.
+- `2` = Blocking `Error` (**STOP** — fix all errors and re-run before reporting completion; see `[[CLAUDE]]` §2)
+- Label all reported counts as `executed` (`[[CLAUDE]]` Invariant 11) and include `- Used: kiem-tra-he-thong` in the handoff block.

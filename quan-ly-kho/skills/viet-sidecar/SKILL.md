@@ -5,7 +5,7 @@ description: "Fill out a binary asset sidecar note (type: asset; the folder card
 
 # `viet-sidecar` — Authoring & Completing Binary Asset Sidecars
 
-## 1. Core Honesty Rule (`[[11-asset-index]]` & `[[AGENTS]]` Invariant 5)
+## 1. Core Honesty Rule (`[[11-asset-index]]` & `[[CLAUDE]]` Invariant 5)
 
 - **Never guess or fabricate visual contents, dimensions, color modes, or layer structures from a filename alone.**
 - A sidecar may transition from `status: draft` (`seen_at: null`) to `status: final` (`seen_at: YYYY-MM-DD`) **only** when the underlying file or preview has actually been inspected (by Aurel, by reading exported PNG/JPG previews, or via deterministic metadata tools like `exiftool`, `ffprobe`, or `font_cards.py`).
@@ -14,7 +14,7 @@ description: "Fill out a binary asset sidecar note (type: asset; the folder card
 
 ## 2. Step-by-Step Procedure
 
-1. **Read the existing sidecar note first (`[[AGENTS]]` Invariant 4).** Where to find it: the card of a store folder sits beside that folder's mirror in the vault's `02_Storage/<branch>/` (all 50 `type: asset` cards on 2026-11-13); a skeleton made by `quet-kho` is at the store's sidecar destination in `[[stores]]` §2 (`03_Atelier/02_Asset_Catalog/` for `shared-bulk`, which holds no card yet). The file it describes is on the Drive store, never in the vault.
+1. **Read the existing sidecar note first (`[[CLAUDE]]` Invariant 4).** Where to find it: the card of a store folder sits beside that folder's mirror in the vault's `02_Storage/<branch>/` (all 50 `type: asset` cards on 2026-11-13); a skeleton made by `quet-kho` is at the store's sidecar destination in `[[stores]]` §2 (`03_Atelier/02_Asset_Catalog/` for `shared-bulk`, which holds no card yet). The file it describes is on the Drive store, never in the vault.
 2. **Extract deterministic technical metadata (`executed`):**
    - Images / PSD / AI / PDF: `exiftool <file>` (dimensions, color space, DPI, page/layer count)
    - Video / Audio: `ffprobe -hide_banner <file>` (resolution, codec, fps, duration, sample rate)

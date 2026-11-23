@@ -21,7 +21,7 @@ description: "Reconcile story facts against primary franchise canon in 05_Evasio
 2. **Classify each compared fact into one of three buckets:**
    - **Aligned (`official_canon`):** The story follows the source franchise rule; link to the shared note in `05_Evasion/01_Oeuvre/Database/Fandom/<UNIVERSE>/`.
    - **Intentional Fic Divergence (`fic_explicit` / `author_confirmed`):** The fic author deliberately changed a timeline, age, or power mechanic. Record this as a `scope: project` fact in `<Project>/02_Story_Bible/world-rules/` citing the exact fic chapter (`source.ref`).
-   - **Unexplained Contradiction / Question (`status: unresolved`):** If two equally authoritative sources conflict (`[[AGENTS]]` Invariant 8), create a `type: question` note and ask Aurel to lock a decision (`type: decision`, `canon_layer: project_locked`).
+   - **Unexplained Contradiction / Question (`status: unresolved`):** If two equally authoritative sources conflict (`[[CLAUDE]]` Invariant 8), create a `type: question` note and ask Aurel to lock a decision (`type: decision`, `canon_layer: project_locked`).
 3. **Verify zero project contamination in `Database/Fandom/`:**
    Run `vault_doctor.py --include-fiction` and confirm no project codes or project-scoped links were added to `Database/Fandom/`.
 - Include `- Used: crosscheck-canon` in the handoff block.

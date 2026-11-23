@@ -20,7 +20,7 @@ When creating a branch (inside an external worktree for the three vault reposito
 
 ## 2. Pre-Commit Verification Gates (Mandatory in `D:\AureLysn`)
 
-If the repository root contains `AGENTS.md` and `01_Origine/`, run the verification gates from the vault root **before** creating a commit (`[[09-gates]]`):
+If the repository root contains `CLAUDE.md` and `01_Origine/`, run the verification gates from the vault root **before** creating a commit (`[[09-gates]]`):
 
 1. **Rebuild the vault index AFTER all note edits are complete:**
    ```bash

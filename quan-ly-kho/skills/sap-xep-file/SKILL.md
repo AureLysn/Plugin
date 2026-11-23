@@ -15,7 +15,7 @@ description: "Triage binary files from the store inbox on Drive (kho-cloud-inbox
 
 ## 2. Step-by-Step Procedure
 
-1. **Classify `lane` first (`[[AGENTS]]` §0 & §2):**
+1. **Classify `lane` first (`[[CLAUDE]]` §0 & §2):**
    The file goes to the **store** (a folder on Drive, resolved by its id in `[[stores]]`). The vault folder of the same branch name, `02_Storage/<branch>/`, receives only the card.
    - `work` → store `work-archive` (branch `03_Finished_Work`)
    - `personal` (illustrations, personal archives, fiction primary sources) → store `personal-bulk` (branch `01_Personal_Archive`)
@@ -31,5 +31,5 @@ description: "Triage binary files from the store inbox on Drive (kho-cloud-inbox
    python 01_Origine/04_Tools/VaultTool/Organization/asset_scan.py --check
    ```
 4. **Retiring duplicate or superseded binaries:**
-   Move retired binaries to `_to_delete\<YYYY-MM-DD>\` on the Drive store (never into the Git-tracked markdown vault tree). Permanent deletion is performed only by Aurel (`[[AGENTS]]` Invariant 3).
+   Move retired binaries to `_to_delete\<YYYY-MM-DD>\` on the Drive store (never into the Git-tracked markdown vault tree). Permanent deletion is performed only by Aurel (`[[CLAUDE]]` Invariant 3).
 - Include `- Used: sap-xep-file` in the handoff block.

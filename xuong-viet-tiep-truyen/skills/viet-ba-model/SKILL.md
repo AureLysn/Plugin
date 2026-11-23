@@ -5,7 +5,7 @@ description: "Three-model chapter pipeline chosen by Aurel (2026-11-15): Claude 
 
 # `viet-ba-model` — Claude plans · DeepSeek writes · GPT reviews · Claude checks last
 
-Decision: Aurel 2026-11-15, *"claude lên kế hoạch deepseek viết chính, gpt kiểm tra và claude kiểm tra lại lần cuối"*. First run: CLS arc 1 v6, ch1–ch4. The project record of the decision is `05_Evasion/01_Oeuvre/Studio/Continue/CLS_crossover-va-lenh-su/01_Project-canon/sources/user-input/20261115-quy-trinh-ba-model.md`.
+Decision: Aurel 2026-11-15, *"claude lên kế hoạch deepseek viết chính, gpt kiểm tra và claude kiểm tra lại lần cuối"*. First run: CLS arc 1 v6, ch1–ch4. The project record of the decision is `05_Evasion/01_Oeuvre/Studio/Original/CLS_crossover-va-lenh-su/01_Project-canon/sources/user-input/20261115-quy-trinh-ba-model.md`.
 
 ## 1. Roles and gates
 

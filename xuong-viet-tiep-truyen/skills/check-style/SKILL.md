@@ -20,7 +20,7 @@ description: "Audit chapter prose against project style targets (02_Story_Bible/
 | Strength | On deviation | Action required |
 |---|---|---|
 | **`hard`** | Defect | **Must be fixed** before finalization (e.g., forbidden AI clichés, explicit POV leak) |
-| **`target`** | Numerical miss | **Report the number and ask Aurel** (`[[AGENTS]]` §2). Never pad prose with fluff to force a number into range |
+| **`target`** | Numerical miss | **Report the number and ask Aurel** (`[[CLAUDE]]` §2). Never pad prose with fluff to force a number into range |
 | **`tendency`** | Stylistic preference | Note it; deliberate deviation for narrative impact is permitted |
 
 ---
