@@ -1,6 +1,6 @@
 {
   "name": "vault-ops",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "System administration for AureLysn Vault (D:\\AureLysn): verification gates (vault_doctor, vault_index, claim_check), 3-2-1 zip snapshots, session handoffs, pre-handoff verification checklist updates, and stale-index commit blocking",
   "author": {
     "name": "Aurel"

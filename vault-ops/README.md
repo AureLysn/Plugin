@@ -21,3 +21,4 @@ System administration plugin for **`D:\AureLysn`** (`01_Origine/`, `06_Station/`
 - `hooks/hooks.json` uses `${CLAUDE_PLUGIN_ROOT}` paths and is the config Claude Code loads.
 - `hooks.json` at the plugin root uses relative `python hooks/<name>.py` commands and serves Google Antigravity (Aurel, 2026-11-13).
 - The hook scripts in `hooks/` are the single source; both configs must list the same scripts. Change both in the same edit.
+- Save both configs as UTF-8 **without BOM**. Claude Code rejects a `hooks.json` that starts with a BOM (`JSON Parse error: Unrecognized token`) and loads none of the plugin's hooks; the BOM sat in both plugins from 2026-11-14 until 2026-11-23 (`claude plugin list` showed `failed to load`).
