@@ -9,11 +9,14 @@ The mock `vault_index.py --check` reports the indexes named in STALE.txt as stal
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import subprocess
 import sys
 import tempfile
 from pathlib import Path
+
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 HOOK = Path(__file__).with_name("chan_commit_index_cu.py")
 ROOT_IDX = "01_Origine/05_Meta/Index/vault-index.json"
@@ -62,6 +65,16 @@ def stage(repo: Path, name: str) -> None:
     f.parent.mkdir(parents=True, exist_ok=True)
     f.write_text("hello\n", encoding="utf-8")
     subprocess.run(["git", "add", name], cwd=str(repo), check=True)
+
+
+def run_raw(stdin: str, strict: bool) -> int:
+    env = dict(os.environ)
+    env.pop("GIT_GUARD_STRICT", None)
+    if strict:
+        env["GIT_GUARD_STRICT"] = "1"
+    r = subprocess.run([sys.executable, str(HOOK)], input=stdin,
+                       capture_output=True, text=True, encoding="utf-8", env=env)
+    return r.returncode
 
 
 def run_hook(cmd: str, cwd: Path, tool: str = "Bash") -> int:
@@ -137,6 +150,23 @@ def main() -> int:
         stage(v / "05_Evasion", "01_Oeuvre/note.md")
         case("PowerShell: Push-Location 05_Evasion; git commit -> chặn",
              run_hook('Push-Location 05_Evasion; git commit -m "x"; Pop-Location', v, tool="PowerShell"), 2)
+
+        # 11-15. commits handed to another program (plugin-benchmark-20261124 N5; allowed until 0.10.0)
+        v = make_fake_vault(tmp / "c11", [ROOT_IDX])
+        stage(v, "note.md")
+        case("bọc trong bash -c, index cũ -> chặn", run_hook('bash -c "git commit -m x"', v), 2)
+        case("bọc trong powershell -Command, index cũ -> chặn",
+             run_hook('powershell -NoProfile -Command "git commit -m x"', v, tool="PowerShell"), 2)
+        case("trong khối if của PowerShell, index cũ -> chặn",
+             run_hook('if ($true) { git commit -m "x" }', v, tool="PowerShell"), 2)
+        case("chỉ nhắc trong echo -> cho qua", run_hook('echo "bash -c \'git commit -m x\'"', v), 0)
+        v = make_fake_vault(tmp / "c15", [])
+        stage(v, "note.md")
+        case("bọc trong bash -c, index khớp -> cho qua", run_hook('bash -c "git commit -m x"', v), 0)
+
+        # 16-17. fail mode (G4)
+        case("JSON hỏng, mặc định -> cho qua", run_raw("{khong phai json", False), 0)
+        case("JSON hỏng, GIT_GUARD_STRICT=1 -> chặn", run_raw("{khong phai json", True), 2)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 

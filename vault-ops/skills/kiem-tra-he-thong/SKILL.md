@@ -20,7 +20,7 @@ When notes have been added, renamed, or edited, rebuild both index roots first:
 ```bash
 python 01_Origine/04_Tools/VaultTool/Core/vault_index.py --build --include-fiction
 ```
-**In an external worktree** (`D:\AureLysn-wt\<slug>`) the nested repositories `05_Evasion/` and `04_Portfolio/` are absent: a `--build` there drops their notes from `vault-index.json`, `--check` reports them as drift, and `vault_doctor` reports links into them as broken. Before committing from a worktree, keep the `HEAD` entries of `04_Portfolio/` and `05_Evasion/` in the rebuilt index (or rebuild on `D:\AureLysn` after the merge is pulled), and count only errors in files the branch changed (2026-11-23).
+**In an external worktree** (`D:\AureLysn-wt\<slug>`) the nested repositories `05_Evasion/` and `04_Portfolio/` are absent unless they are checked out there. Before committing notes, add both as detached checkouts (`git-guard` `git-an-toan` §4.2) and rebuild with `--build` alone, because `--include-fiction` would rewrite the fiction index of the nested checkout. `--check` then matches both roots and `vault_doctor` resolves the links into them (executed 2026-11-24). Without the checkouts, `--build` drops their notes from `vault-index.json`, `--check` reports drift and `vault_doctor` reports links into them as broken: count only errors in files the branch changed.
 
 To verify without writing:
 ```bash
@@ -28,7 +28,7 @@ python 01_Origine/04_Tools/VaultTool/Core/vault_index.py --check
 ```
 
 ### Step 2 — Run `vault_doctor.py` (Notes & Templates)
-Check all indexed notes (Root 1 + Root 2) and all note templates in `01_Origine/04_Tools/Templates/`:
+Check all indexed notes (Root 1 + Root 2), the hook rules of `01_Origine/05_Meta/Rules/hook/` (`[[hook-rule-format]]`; after changing one, `chay_luat.py --check` also times its regexes) and all note templates in `01_Origine/04_Tools/Templates/`:
 ```bash
 python 01_Origine/04_Tools/VaultTool/Core/vault_doctor.py --include-fiction
 python 01_Origine/04_Tools/VaultTool/Core/vault_doctor.py --templates

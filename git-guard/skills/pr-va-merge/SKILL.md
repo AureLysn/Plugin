@@ -58,7 +58,14 @@ description: "Push feature branches, open GitHub Pull Requests via gh CLI, verif
    ```bash
    git -C D:/AureLysn pull --ff-only origin main
    ```
-4. If the work was done in an external worktree, remove the worktree cleanly:
+4. If the work was done in an external worktree, remove it cleanly. Nested checkouts (`git-an-toan` §4.2) go first, each in its own command. If one is refused (uncommitted files), stop: removing the outer worktree would delete it anyway, without `--force` (`chan_git_pha_huy.py` asks in that case):
+   ```bash
+   git -C D:/AureLysn/04_Portfolio worktree remove <worktree-path>/04_Portfolio
+   ```
+   ```bash
+   git -C D:/AureLysn/05_Evasion worktree remove <worktree-path>/05_Evasion
+   ```
+   Then the worktree itself:
    ```bash
    git -C D:/AureLysn worktree remove <worktree-path>
    git -C D:/AureLysn worktree prune

@@ -1,7 +1,7 @@
 {
   "name": "vault-ops",
-  "version": "0.9.1",
-  "description": "System administration for AureLysn Vault (D:\\AureLysn): verification gates (vault_doctor, vault_index, claim_check), 3-2-1 zip snapshots, session handoffs, pre-handoff verification checklist updates, and stale-index commit blocking",
+  "version": "0.10.0",
+  "description": "System administration for AureLysn Vault (D:\\AureLysn): verification gates (vault_doctor, vault_index, claim_check), 3-2-1 zip snapshots with a restore drill, session handoffs with reminders at session start and before compaction, hook rules written as vault notes (shadow mode first), pre-handoff verification checklist updates, and stale-index commit blocking",
   "author": {
     "name": "Aurel"
   }

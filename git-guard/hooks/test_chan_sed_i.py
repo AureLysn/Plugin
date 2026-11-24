@@ -8,6 +8,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 HOOK = Path(__file__).with_name("chan_sed_i.py")
 
 CASES = [
@@ -20,6 +22,9 @@ CASES = [
     ("sed -n '1,20p' file.md", 0, "sed -n đọc dòng được phép"),
     ('git commit -m "cấm dùng sed -i trên Windows"', 0, "nhắc trong commit message"),
     ("cat <<'EOF'\nsed -i 's/a/b/' x\nEOF", 0, "nằm trong heredoc"),
+    # wrapped (plugin-benchmark-20261124 G3; allowed until 0.8.0)
+    ('bash -c "sed -i s/a/b/ file.md"', 2, "bọc trong bash -c"),
+    ('git commit -m "đừng chạy bash -c \'sed -i x\'"', 0, "bash -c chỉ nhắc trong commit message"),
 ]
 
 

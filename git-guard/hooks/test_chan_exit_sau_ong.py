@@ -8,6 +8,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 HOOK = Path(__file__).with_name("chan_exit_sau_ong.py")
 
 CASES = [
@@ -19,11 +21,18 @@ CASES = [
     ("python vault_doctor.py | tail -5; echo ${PIPESTATUS[0]}", 0, "dùng PIPESTATUS[0]"),
     ("python vault_doctor.py || echo $?", 0, "toán tử || không phải ống |"),
     ("python vault_doctor.py | tail -5", 0, "pipe để xem đầu ra, không đọc $? giả"),
+    # wrapped (plugin-benchmark-20261124 G3; allowed until 0.8.0)
+    ('bash -c "python vault_doctor.py | tail -5; echo $?"', 2, "bọc trong bash -c"),
+    # PowerShell: `$?` is about the last pipeline, not the pipe (false block found by replaying
+    # real commands, 2026-11-24); a sh command handed over from PowerShell is still checked
+    ("git diff --cached --stat | Select-Object -Last 1; git commit -q -m x; if ($?) { git push }", 0,
+     "PowerShell: $? sau git commit", "PowerShell"),
+    ("bash -c 'python vault_doctor.py | tail -5; echo $?'", 2, "PowerShell gọi bash -c", "PowerShell"),
 ]
 
 
-def run(cmd: str) -> int:
-    payload = json.dumps({"tool_name": "Bash", "tool_input": {"command": cmd}})
+def run(cmd: str, tool: str = "Bash") -> int:
+    payload = json.dumps({"tool_name": tool, "tool_input": {"command": cmd}})
     r = subprocess.run([sys.executable, str(HOOK)], input=payload,
                        capture_output=True, text=True, encoding="utf-8")
     return r.returncode
@@ -31,8 +40,8 @@ def run(cmd: str) -> int:
 
 def main() -> int:
     failed = 0
-    for cmd, want, desc in CASES:
-        got = run(cmd)
+    for cmd, want, desc, *tool in CASES:
+        got = run(cmd, *tool)
         ok = got == want
         failed += not ok
         print(f"  [{'OK  ' if ok else 'FAIL'}] ({got}=={want}) {desc}")

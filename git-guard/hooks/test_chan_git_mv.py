@@ -8,6 +8,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 HOOK = Path(__file__).with_name("chan_git_mv.py")
 
 CASES = [
@@ -19,6 +21,11 @@ CASES = [
     ("git mv image.png image2.png", 0, "git mv trên ảnh được phép"),
     ('git commit -m "tránh dùng git mv foo.md"', 0, "nhắc trong commit message"),
     ("cat <<'EOF'\ngit mv a.md b.md\nEOF", 0, "nằm trong heredoc"),
+    # wrapped or path-qualified (plugin-benchmark-20261124 N1; allowed until 0.8.0)
+    ('bash -c "git mv a.md b.md"', 2, "bọc trong bash -c"),
+    ("git.exe mv a.md b.md", 2, "git.exe"),
+    ('& "C:\\Program Files\\Git\\cmd\\git.exe" mv a.md b.md', 2, "toán tử & với đường dẫn git.exe"),
+    ('git commit -m "đừng chạy bash -c \'git mv a.md b.md\'"', 0, "bash -c chỉ nhắc trong commit message"),
 ]
 
 

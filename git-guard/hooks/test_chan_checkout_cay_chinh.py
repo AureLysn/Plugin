@@ -8,6 +8,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 HOOK = Path(__file__).with_name("chan_checkout_cay_chinh.py")
 
 CASES = [
@@ -19,10 +21,20 @@ CASES = [
     ("git -C D:/AureLysn checkout feat/x", "D:\\Other", 2, "git -C trỏ vào cây chính"),
     ("cd D:/AureLysn && git checkout feat/x", "D:\\Other", 2, "cd vào cây chính rồi checkout"),
     ("git checkout -- CLAUDE.md", "D:\\AureLysn", 0, "khôi phục 1 file có -- được phép"),
+    ("for b in a b; do git checkout $b; done", "D:/AureLysn", 2, "trong vòng lặp một dòng (N7)"),
+    ("git \\\n switch main", "D:/AureLysn", 2, "nối dòng (N7)"),
+    ('git commit -m "dòng 1\ngit checkout main là cấm"', "D:/AureLysn", 0, "chuỗi nhiều dòng (N7)"),
+    ("git status # rồi git switch main", "D:/AureLysn", 0, "chú thích (N7)"),
     ("git checkout HEAD -- 01_Origine/a.md", "D:\\AureLysn", 0, "checkout HEAD -- file được phép"),
     ("git checkout -b feat/test", "D:\\AureLysn-wt\\test", 0, "checkout trong worktree ngoài được phép"),
     ("cd D:/AureLysn-wt/test && git checkout -b feat/x", "D:\\AureLysn", 0, "cd sang worktree rồi checkout được phép"),
     ('git commit -m "không chạy git checkout main"', "D:\\AureLysn", 0, "nhắc trong commit message"),
+    # wrapped (plugin-benchmark-20261124 N1; allowed until 0.8.0)
+    ('bash -c "git checkout main"', "D:\\AureLysn", 2, "bọc trong bash -c trên cây chính"),
+    ('powershell -Command "git switch main"', "D:\\AureLysn", 2, "bọc trong powershell -Command"),
+    ('cd D:/AureLysn && bash -c "git checkout feat/x"', "D:\\Other", 2, "cd vào cây chính rồi bash -c"),
+    ('bash -c "git checkout -b feat/x"', "D:\\AureLysn-wt\\test", 0, "bash -c trong worktree ngoài được phép"),
+    ('git commit -m "đừng chạy bash -c \'git checkout main\'"', "D:\\AureLysn", 0, "bash -c chỉ nhắc trong commit message"),
 ]
 
 

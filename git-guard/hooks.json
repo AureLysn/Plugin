@@ -27,6 +27,14 @@
           {
             "type": "command",
             "command": "python hooks/chan_git_pha_huy.py"
+          },
+          {
+            "type": "command",
+            "command": "python hooks/chan_xoa_vinh_vien.py"
+          },
+          {
+            "type": "command",
+            "command": "python hooks/chan_sua_rao_chan.py"
           }
         ]
       }

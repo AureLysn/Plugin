@@ -7,6 +7,10 @@
           {
             "type": "command",
             "command": "python hooks/chan_commit_index_cu.py"
+          },
+          {
+            "type": "command",
+            "command": "python hooks/chay_luat.py"
           }
         ]
       }

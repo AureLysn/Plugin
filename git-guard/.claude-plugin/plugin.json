@@ -1,7 +1,7 @@
 {
   "name": "git-guard",
-  "version": "0.7.1",
-  "description": "Safe Git operations across all repositories (D:\\AureLysn, Portfolio, Subsystems): branch & commit discipline, PR & merge, history recovery, and 6 PreToolUse safety hooks (Bash + PowerShell)",
+  "version": "0.8.0",
+  "description": "Safe Git operations across all repositories (D:\\AureLysn, Portfolio, Subsystems): branch & commit discipline, PR & merge, history recovery, and 8 PreToolUse safety hooks (Bash + PowerShell with wrapped commands, plus file edits of guardrail files)",
   "author": {
     "name": "Aurel"
   }
