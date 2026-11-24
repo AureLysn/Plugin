@@ -12,6 +12,12 @@ Repositories (Aurel, 2026-11-23, HT-043):
   05_Evasion/  -> 05_Evasion/01_Oeuvre/System/runtime/index.json  (root 2, fiction)
   any other repository (04_Portfolio/, app repositories) has no index and is skipped.
 
+A commit handed to another program (`bash -c "git commit …"`, `powershell -Command …`, an
+`if { }` body) is unwrapped first by `tach_lenh.variants`, a byte-identical copy of the
+git-guard module kept in step by `test_ban_sao.py` (0.10.0, plugin-benchmark-20261124
+N5). Unreadable input fails open (exit 0) unless `GIT_GUARD_STRICT=1` is set, the switch of
+git-guard (G4): then it blocks.
+
 Exit 0 = allow, 2 = block (stderr shown to Claude).
 """
 
@@ -28,6 +34,19 @@ try:
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 except Exception:
     pass
+
+try:
+    from tach_lenh import shell_of, unreadable, variants  # copy of the git-guard module (0.10.0)
+except Exception:  # helper missing: raw command only; GIT_GUARD_STRICT still honoured
+    def variants(cmd: str, shell: str | None = None) -> list[str]:
+        return [cmd]
+
+    def shell_of(data: object) -> str | None:
+        return None
+
+    def unreadable(reason: str, default: int = 0) -> int:
+        strict = os.environ.get("GIT_GUARD_STRICT", "").strip().lower() in ("1", "true", "yes", "on")
+        return 2 if strict else default
 
 HEREDOC = re.compile(r"<<-?\s*['\"]?(\w+)['\"]?.*?\n\1\b", re.S)
 QUOTED = re.compile(r'"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\'')
@@ -182,13 +201,24 @@ def check_cmd(cmd: str, cwd: str) -> str | None:
 
 def main() -> int:
     try:
-        data = json.load(sys.stdin)
+        data = json.loads(sys.stdin.buffer.read().decode("utf-8-sig", "replace"))
     except Exception:
-        return 0
-    ti = data.get("tool_input") or data.get("toolInput") or {}
+        return unreadable("stdin không phải JSON")
+    ti = (data.get("tool_input") or data.get("toolInput")) if isinstance(data, dict) else None
+    if not isinstance(ti, dict):
+        return unreadable("không có tool_input")
     cmd = ti.get("command") or ti.get("CommandLine") or ""
+    if not isinstance(cmd, str):
+        return unreadable("command không phải chuỗi")
     cwd = data.get("cwd") or data.get("currentWorkingDirectory") or os.getcwd()
-    msg = check_cmd(cmd, cwd)
+    try:
+        msg = None
+        for v in variants(cmd, shell_of(data)):
+            msg = check_cmd(v, cwd)
+            if msg:
+                break
+    except Exception as e:
+        return unreadable(f"lỗi khi kiểm: {type(e).__name__}: {e}", default=1)
     if msg:
         print(msg, file=sys.stderr)
         return 2

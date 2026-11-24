@@ -6,14 +6,21 @@ Hard block (exit 2) — blanket staging, banned by `nhanh-va-commit` §3:
 
 Ask Aurel — the commands `git-an-toan` §3 allows only with Aurel's explicit confirmation:
   `git reset --hard`, `git checkout [--] .`, `git restore .` (worktree), `git clean -f…`,
-  `git push --force` / `-f` / `--force-with-lease` / `+refspec`, `git branch -D`.
+  `git push --force` / `-f` / `--force-with-lease` / `+refspec`, `git branch -D`,
+  `git stash drop` / `git stash clear`, `git worktree remove --force` (the last three since 0.8.0),
+  and `git worktree remove <path>` while another checkout is nested in that worktree: Git looks
+  only at its own files there, so a gitignored nested checkout (`04_Portfolio/`, `05_Evasion/`,
+  `git-an-toan` §4) goes with it, uncommitted files included (executed 2026-11-24; 0.8.0).
   Claude Code payload (has `hook_event_name`): exit 0 with `permissionDecision: "ask"`,
   so the permission prompt is Aurel's confirmation.
   Any other host (Google Antigravity, which only reads exit codes): exit 2.
 
 Only the command word of each segment counts: a quoted string, a heredoc body or
-`echo git add -A` is not a Git command. Unreadable input fails open (exit 0), as in the
-other hooks of this plugin.
+`echo git add -A` is not a Git command. A command handed to another program
+(`bash -c "…"`, `powershell -Command "…"`, `cmd /c …`, `& "…\\git.exe"`, `Start-Process`,
+`time …`) is unwrapped by `tach_lenh.variants` and checked too (0.8.0). Unreadable input
+fails open (exit 0), as in the other hooks of this plugin, unless `GIT_GUARD_STRICT=1`
+is set: then it blocks (`tach_lenh.unreadable`, 0.8.0).
 
 Exit 0 = allow (or ask, see above), 2 = block.
 """
@@ -21,6 +28,7 @@ Exit 0 = allow (or ask, see above), 2 = block.
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 
@@ -29,6 +37,25 @@ try:
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 except Exception:
     pass
+
+try:
+    from tach_lenh import shell_of, unreadable, variants  # shared reading and fail mode (0.8.0)
+except Exception:  # helper missing: raw command only; GIT_GUARD_STRICT still honoured
+    def variants(cmd: str, shell: str | None = None) -> list[str]:
+        return [cmd]
+
+    def shell_of(data: object) -> str | None:
+        return None
+
+    def unreadable(reason: str, default: int = 0) -> int:
+        strict = os.environ.get("GIT_GUARD_STRICT", "").strip().lower() in ("1", "true", "yes", "on")
+        return 2 if strict else default
+
+try:
+    from duong_dan import Scope, walk  # paths, for nested checkouts only (0.8.0)
+    PATHS = True
+except Exception:
+    PATHS = False
 
 HEREDOC = re.compile(r"<<-?\s*['\"]?(\w+)['\"]?.*?\n\1\b", re.S)
 QUOTED = re.compile(r'"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\'')
@@ -94,6 +121,43 @@ def classify(sub: str, args: list[str]) -> tuple[str, str] | None:
         if "D" in flags or (("--delete" in argset or "d" in flags) and ("--force" in argset or "f" in flags)):
             return "ask", "git branch -D (xoá nhánh chưa merge)"
         return None
+    action = next((a for a in args if not a.startswith("-")), "")
+    if sub == "stash" and action in ("drop", "clear"):
+        return "ask", f"git stash {action} (xoá stash, rất khó lấy lại)"
+    if sub == "worktree" and action == "remove" and ("--force" in argset or "f" in flags):
+        return "ask", "git worktree remove --force (xoá worktree kèm thay đổi chưa commit)"
+    return None
+
+
+def removed_worktree(words: list[str], scope: Scope) -> str | None:
+    """Absolute path of the worktree in `git [-C dir] worktree remove <path>`, else None."""
+    i = 0
+    while i < len(words) and words[i].startswith("-"):
+        if words[i] == "-C" and i + 1 < len(words):
+            scope = Scope(scope.resolve(words[i + 1]))
+        i += 2 if words[i] in GLOBAL_OPTS_WITH_VALUE else 1
+    args = [w for w in words[i + 1:] if not w.startswith("-")]
+    if words[i:i + 1] != ["worktree"] or args[:1] != ["remove"] or len(args) < 2:
+        return None
+    return scope.resolve(args[1])
+
+
+def nested_checkouts(cmd: str, cwd: str | None, shell: str | None) -> str | None:
+    """Label when a `git worktree remove` takes Git checkouts nested in that worktree with it.
+
+    A worktree named by its last path component only (`remove <slug>`) is not resolved.
+    """
+    for c in walk(cmd, cwd, shell):
+        if c.program != "git":
+            continue
+        path = removed_worktree([t.value for t in c.args], c.scope)
+        if path is None or not os.path.isdir(path):
+            continue
+        nested = [d for d in sorted(os.listdir(path)) if os.path.exists(os.path.join(path, d, ".git"))]
+        if nested:
+            return (f"git worktree remove (bên trong còn checkout lồng: {', '.join(nested)}; "
+                    "chúng bị xoá theo, kể cả file chưa commit, dù không có --force. "
+                    "Gỡ từng checkout lồng trước: `pr-va-merge` §3)")
     return None
 
 
@@ -127,12 +191,29 @@ ASK_MSG = (
 
 def main() -> int:
     try:
-        data = json.load(sys.stdin)
+        data = json.loads(sys.stdin.buffer.read().decode("utf-8-sig", "replace"))
     except Exception:
-        return 0
-    ti = data.get("tool_input") or data.get("toolInput") or {}
+        return unreadable("stdin không phải JSON")
+    ti = (data.get("tool_input") or data.get("toolInput")) if isinstance(data, dict) else None
+    if not isinstance(ti, dict):
+        return unreadable("không có tool_input")
     cmd = ti.get("command") or ti.get("CommandLine") or ""
-    hit = check(cmd)
+    if not isinstance(cmd, str):
+        return unreadable("command không phải chuỗi")
+    cwd = data.get("cwd") or data.get("currentWorkingDirectory") or os.getcwd()
+    try:
+        hit = None
+        for v in variants(cmd, shell_of(data)):
+            h = check(v)
+            if h and (hit is None or h[0] == "block"):
+                hit = h
+                if h[0] == "block":
+                    break
+        if hit is None and PATHS:
+            label = nested_checkouts(cmd, cwd, shell_of(data))
+            hit = ("ask", label) if label else None
+    except Exception as e:
+        return unreadable(f"lỗi khi kiểm: {type(e).__name__}: {e}", default=1)
     if not hit:
         return 0
     kind, label = hit

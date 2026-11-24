@@ -18,6 +18,21 @@ try:
 except Exception:
     pass
 
+try:
+    from tach_lenh import shell_of, unreadable, variants  # shared reading and fail mode (0.8.0)
+except Exception:  # helper missing: raw command only; GIT_GUARD_STRICT still honoured
+    import os as _os
+
+    def variants(cmd: str, shell: str | None = None) -> list[str]:
+        return [cmd]
+
+    def shell_of(data: object) -> str | None:
+        return None
+
+    def unreadable(reason: str, default: int = 0) -> int:
+        strict = _os.environ.get("GIT_GUARD_STRICT", "").strip().lower() in ("1", "true", "yes", "on")
+        return 2 if strict else default
+
 HEREDOC = re.compile(r"<<-?\s*['\"]?(\w+)['\"]?.*?\n\1\b", re.S)
 QUOTED = re.compile(r'"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\'')
 
@@ -51,12 +66,23 @@ def check(cmd: str) -> str | None:
 
 def main() -> int:
     try:
-        data = json.load(sys.stdin)
+        data = json.loads(sys.stdin.buffer.read().decode("utf-8-sig", "replace"))
     except Exception:
-        return 0
-    ti = data.get("tool_input") or data.get("toolInput") or {}
+        return unreadable("stdin không phải JSON")
+    ti = (data.get("tool_input") or data.get("toolInput")) if isinstance(data, dict) else None
+    if not isinstance(ti, dict):
+        return unreadable("không có tool_input")
     cmd = ti.get("command") or ti.get("CommandLine") or ""
-    msg = check(cmd)
+    if not isinstance(cmd, str):
+        return unreadable("command không phải chuỗi")
+    try:
+        msg = None
+        for v in variants(cmd, shell_of(data)):
+            msg = check(v)
+            if msg:
+                break
+    except Exception as e:
+        return unreadable(f"lỗi khi kiểm: {type(e).__name__}: {e}", default=1)
     if msg:
         print(msg, file=sys.stderr)
         return 2

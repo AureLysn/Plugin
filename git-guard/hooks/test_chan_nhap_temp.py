@@ -8,6 +8,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 HOOK = Path(__file__).with_name("chan_nhap_temp.py")
 
 CASES = [
@@ -15,13 +17,15 @@ CASES = [
     ("python3 $TEMP/migrate.py", 2, "chạy script trong $TEMP"),
     ("cat <<'EOF' > /tmp/run.py\nprint(1)\nEOF", 2, "heredoc ghi ra /tmp/run.py"),
     ("echo hi > $TMPDIR/out.txt", 2, "redirect ra $TMPDIR"),
-    ("python C:/Users/aurel/AppData/Local/Temp/a.py", 2, "AppData/Local/Temp/*.py"),
-    ("python /c/Users/aurel/scratchpad/test.py", 0, "scratchpad/*.py được phép"),
-    ("python C:/Users/aurel/AppData/Local/Temp/claude/x/scratchpad/a.py", 0, "scratchpad của phiên nằm trong Temp được phép"),
-    ("echo hi > C:/Users/aurel/AppData/Local/Temp/claude/x/scratchpad/out.txt", 0, "redirect vào scratchpad của phiên được phép"),
+    ("python C:/Users/x/AppData/Local/Temp/a.py", 2, "AppData/Local/Temp/*.py"),
+    ("python /c/Users/x/scratchpad/test.py", 0, "scratchpad/*.py được phép"),
+    ("python C:/Users/x/AppData/Local/Temp/claude/x/scratchpad/a.py", 0, "scratchpad của phiên nằm trong Temp được phép"),
+    ("echo hi > C:/Users/x/AppData/Local/Temp/claude/x/scratchpad/out.txt", 0, "redirect vào scratchpad của phiên được phép"),
     ("python 01_Origine/04_Tools/VaultTool/Core/vault_doctor.py", 0, "chạy tool chính thức trong vault"),
     ('python -c "import sys; print(sys.version)"', 0, "python -c trực tiếp được phép"),
     ("ls /tmp", 0, "chỉ xem /tmp, không ghi và không chạy script"),
+    # wrapped (plugin-benchmark-20261124 G3)
+    ('bash -c "python /tmp/fix.py"', 2, "bọc trong bash -c"),
 ]
 
 

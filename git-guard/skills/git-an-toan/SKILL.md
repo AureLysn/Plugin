@@ -35,6 +35,8 @@ git worktree list
 | `<gate> \| tail; echo $?` | `chan_exit_sau_ong.py` | Run the gate without piping, or use `set -o pipefail` / `${PIPESTATUS[0]}` |
 | Branch switch on `D:\AureLysn`, `05_Evasion` or `04_Portfolio` | `chan_checkout_cay_chinh.py` | Create an external worktree (`D:\AureLysn-wt\<slug>`); use `git checkout -- <file>` only for single-file restore |
 | `git add -A` / `--all` / `.` / `./` / `:/` / `*` | `chan_git_pha_huy.py` | Stage files by path (`nhanh-va-commit` §3) |
+| Permanent delete in the vault, a worktree or a store, or a recursive delete outside the scratchpad, temp and cache folders (asks) | `chan_xoa_vinh_vien.py` | Move to `_to_delete/<YYYY-MM-DD>/`, or work in the session scratchpad; delete only after Aurel confirms in the prompt |
+| Editing `CLAUDE.md`, a `hooks.json`, `.claude/settings*.json`, a plugin manifest, an installed plugin or a hook rule note (asks) | `chan_sua_rao_chan.py` | Change guardrails only as a task Aurel gave; she confirms in the prompt |
 
 ---
 
@@ -44,7 +46,9 @@ Never execute any of the following without Aurel's explicit confirmation in the 
 - `git reset --hard`, `git checkout -- .`, `git restore .`, `git clean -fd`
 - `git push --force` or `git push --force-with-lease`
 - `git branch -D <branch>` on unmerged branches
-- `rm` on any vault note or storage file (move to `_to_delete/<YYYY-MM-DD>/` instead — `[[CLAUDE]]` Invariant 3)
+- `git stash drop` or `git stash clear` (a dropped stash is very hard to get back)
+- `git worktree remove --force` (it deletes the worktree's uncommitted changes; without `--force` Git refuses a dirty worktree, which is the safe default used by `pr-va-merge`), and `git worktree remove` on a worktree that still holds nested checkouts (§4.2): Git deletes those without `--force`, uncommitted files included (executed 2026-11-24)
+- `rm` on any vault note or storage file (move to `_to_delete/<YYYY-MM-DD>/` instead — `[[CLAUDE]]` Invariant 3); since 0.8.0 `chan_xoa_vinh_vien.py` turns it into a permission prompt as well
 
 ---
 
@@ -60,8 +64,14 @@ This is how every change is made (§1.3). The main tree stays on `main`; the bra
    git -C D:/AureLysn/05_Evasion worktree add D:/AureLysn-wt/evasion-<slug> -b <type>/<slug>
    ```
    A worktree of `05_Evasion/` or `04_Portfolio/` is not inside a vault root, so the vault tools need `--root` (or `AURELYSN_VAULT`) there; the gates are run from `D:\AureLysn` after the merge is pulled.
-2. If the Claude Code desktop app creates a worktree inside `.claude/worktrees/<name>`, verify `.claude/worktrees/` is listed in `.gitignore` and `.vaultignore`.
-3. After the branch is merged into `main` by its PR (`pr-va-merge`), remove the worktree and delete the merged branch.
+2. **A branch that will commit notes** also needs the two nested repositories inside its worktree, as detached checkouts. The stale-index hook of `vault-ops` rebuilds the index from disk at commit, and without them the notes of `04_Portfolio/` and `05_Evasion/` look deleted (`[[plugin-benchmark-20261124]]` V9):
+   ```bash
+   git -C D:/AureLysn/04_Portfolio worktree add --detach D:/AureLysn-wt/<slug>/04_Portfolio
+   git -C D:/AureLysn/05_Evasion worktree add --detach D:/AureLysn-wt/<slug>/05_Evasion
+   ```
+   They are there to be read: change those two repositories in a worktree of their own (step 1), and rebuild the index without `--include-fiction`, which would rewrite the fiction index of the nested checkout. Remove both before the outer worktree (`pr-va-merge` §3).
+3. If the Claude Code desktop app creates a worktree inside `.claude/worktrees/<name>`, verify `.claude/worktrees/` is listed in `.gitignore` and `.vaultignore`.
+4. After the branch is merged into `main` by its PR (`pr-va-merge`), remove the worktree and delete the merged branch.
 
 ---
 
