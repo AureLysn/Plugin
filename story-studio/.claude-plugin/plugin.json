@@ -1,7 +1,7 @@
 {
   "name": "story-studio",
-  "version": "0.18.0",
-  "description": "Fiction continuation and original story studio for 05_Evasion/01_Oeuvre/: source ingestion, entity extraction, style profiling, drop-point analysis, 7-gate outline planning, chapter drafting, blind continuity/POV verification, and 6-step finalization",
+  "version": "0.19.0",
+  "description": "Fiction continuation and original story studio for 05_Evasion/01_Oeuvre/: source ingestion, entity extraction, style profiling, drop-point analysis, 7-gate outline planning, chapter drafting with a broken-output gate, blind continuity/POV verification whose findings must quote the text, and 6-step finalization",
   "author": {
     "name": "Aurel"
   }

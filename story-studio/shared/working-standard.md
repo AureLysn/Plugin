@@ -45,6 +45,47 @@ When extracting entities, tropes, or canon from a multi-chapter source:
 1. **Gate 1 — Pre-Drafting (`plan_gate.py` + Aurel Approval):**
    - Run `plan_gate.py --project <CODE>` before outlining (the earlier stages are in place), complete the `chapter_plan` (`type: chapter_plan`), dispatch `xuong-kiem` (`review-plan`), and **wait for Aurel to approve the outline** before writing chapter prose (`write-chapter`).
 2. **Gate 2 — Pre-Finalization (`chapter_gate.py` + `xuong-kiem` + Aurel Sign-off):**
-   - Run `chapter_gate.py <chapter.md>` (`style_metrics`, `ai_tells_check`, `pov_leak_check`) and dispatch `xuong-kiem` (`check-continuity`, `check-style`). The main session writes the findings and the fixes into `ch<NN>-review.md` beside the chapter; `state_apply.py` refuses to apply without it.
+   - Run `chapter_gate.py <chapter.md>` (style targets, banned phrases, phrases repeated across chapters, broken output), `ai_tells_check.py`, `style_metrics.py` and `pov_leak_check.py`, and dispatch `xuong-kiem` (`check-continuity`, `check-style`). The main session checks the returned findings (§5) and writes them and the fixes into `ch<NN>-review.md` beside the chapter; `state_apply.py` refuses to apply without it.
    - Promote `status: draft` → `status: final` and apply `state_apply.py` **only** after all gates pass (`exit 0`) and Aurel approves the chapter.
 3. **One exception to "Aurel approves" (Aurel, 2026-10-25), inside a queue only:** when a project's queue has `config.auto_approve` on, `giao_viec.py auto` may approve the plan stop and the commit stop of a chapter by itself — only if the review and fix steps reported 0 serious findings and the measured gate passed (`plan_gate` for the plan; a clean `state_apply` dry run that touches no secret for the commit). Every such approval is listed for Aurel to look at afterwards (`seen`). The arc gate, and anything outside a queue, always waits for Aurel.
+
+---
+
+## 5. Audit Findings Carry a Quotation (0.19.0, `[[plugin-benchmark-20261124]]` S1)
+
+An auditor can report a line that the text does not contain. A finding therefore counts only with the
+words it is about. This binds `xuong-kiem`, the main session when it audits, and the GPT beta read of
+`viet-ba-model`.
+
+1. **Format.** One JSON block carries all findings of a report; a clean report is `{"items": []}`.
+   ```json
+   {"items": [
+     {"severity": "FAIL", "category": "pov",
+      "quote": "the sentence as it stands in the chapter",
+      "problem": "what is wrong with it",
+      "against": {"file": "05_Evasion/01_Oeuvre/…/secrets/x.md", "quote": "the words it contradicts"}}
+   ]}
+   ```
+   - `severity`: `FAIL` (nặng: must be settled before finalization) · `WARN` (vừa) · `NOTE` (nhẹ).
+   - `category`, from this list only: `pov` · `timeline` · `state` (injuries, objects, clothes, positions) · `address` ·
+     `branch` · `canon` · `hook` · `missing` · `logic` · `repetition` · `style` · `voice` · `dialogue` · `language` ·
+     `pacing` · `structure` (plans). The meaning of each is in `finding_check.py`.
+   - `quote`: copied from the audited file, in its own language, never translated or retold. `[...]` stands for a
+     left-out stretch. At least six Han characters or four words; two words are enough for `style`, `voice`,
+     `dialogue` and `language`.
+   - `against`: the other side of a contradiction, as file and words. Give it whenever the claim is that the text
+     disagrees with a note, an earlier chapter or itself.
+   - `missing`: what the plan demands and the chapter lacks cannot be quoted from the chapter. Quote the plan in
+     `against` instead.
+2. **Check**, from `D:\AureLysn`:
+   ```bash
+   python 01_Origine/04_Tools/VaultTool/Validation/finding_check.py --target <chapter.md> <findings.json | ->
+   ```
+   Exit `0` every finding is proven, `1` at least one is not, `2` nothing readable. White space never counts;
+   quotation marks, dashes and full-width forms may differ. The auditor runs it on its own block (`-` reads stdin)
+   and corrects what it misquoted. The caller runs it again on the block it received, before any change to the
+   chapter: after a fix the quoted line is gone.
+3. **Unproven findings** are neither errors nor nothing. The main session decides each one: right, then it adds the
+   quotation; wrong, then it refutes it in the review note with the reason. An undecided unproven `FAIL` is still open:
+   it counts in `giao_viec.py done --nang` and it stops `finalize-chapter`.
+4. **Record.** `--md` prints the two tables (proven, unproven) for `ch<NN>-review.md`.

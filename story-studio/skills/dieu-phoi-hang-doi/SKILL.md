@@ -36,11 +36,11 @@ description: "Drive a project's sequential task queue (hang-doi.json via giao_vi
    python 01_Origine/04_Tools/VaultTool/Tracking/giao_viec.py start --project <CODE>
    ```
    - `kind: agent` → dispatch `xuong-lam` or `xuong-kiem` with the exact assigned skill and chapter path in the prompt. Wait for return.
-   - `kind: main` → handle directly in the main session following the step's skill. The `fix` step writes the findings into `ch<NN>-review.md` beside the chapter; `state_apply.py` needs that file later.
+   - `kind: main` → handle directly in the main session following the step's skill. The `fix` steps first run `finding_check.py` on the auditor's JSON block (`shared/working-standard.md` §5), then write its tables and the fixes into `ch<NN>-review.md` beside the chapter; `state_apply.py` needs that file later.
 5. **Close the job** — the tool runs the step's gate, then records it:
    ```bash
    python 01_Origine/04_Tools/VaultTool/Tracking/giao_viec.py done --project <CODE> --note "<files, metrics>"
-   python 01_Origine/04_Tools/VaultTool/Tracking/giao_viec.py done --project <CODE> --nang <N> --note "..."   # review and fix steps: N = serious findings (review: found; fix: left)
+   python 01_Origine/04_Tools/VaultTool/Tracking/giao_viec.py done --project <CODE> --nang <N> --note "..."   # review: N = FAIL findings returned, proven or not; fix: N = proven ones not fixed + unproven ones not refuted
    ```
    A job that cannot be finished: `fail --project <CODE> --why "..."`; the queue stops. After the cause is fixed: `retry --project <CODE>` (at most `config.max_attempts`).
 6. **Approval stops.** A `human` job opens only on Aurel's word:

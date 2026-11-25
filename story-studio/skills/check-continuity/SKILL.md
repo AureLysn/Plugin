@@ -26,6 +26,6 @@ description: "Audit a chapter draft or outline for continuity errors, POV secret
    - **Physical State & Inventory:** Are injuries, exhaustion, clothing, weapons, and spatial positions consistent from scene start to scene end?
    - **Character Relationships (`02_Story_Bible/relationships/`):** Do forms of address (pronouns/honorifics in Vietnamese/CJK) match the current relationship stage?
    - **Branch Isolation (`[[04-lanes]]` §2.3):** If on `branch: main`, confirm zero facts from alternate `06_Alternate_Versions/branches/` leaked in.
-3. **Report Findings with Line Numbers (`[[feedback]]`):**
-   Classify issues into **Blocking Continuity Errors (`FAIL`)** vs **Minor Polish (`WARN`)**. Run as `xuong-kiem`, return them in the handoff; the main session records them in `ch<NN>-review.md` beside the chapter (needed by `finalize-chapter`).
+3. **Report Findings with Their Words (`shared/working-standard.md` §5):**
+   One JSON block: `FAIL` for a blocking continuity error, `WARN` for a smaller one, `NOTE` for polish; categories `pov`, `timeline`, `state`, `address`, `branch`, `canon`, `hook`, `missing`, `logic`, `repetition`. Quote the chapter, and quote the secret, timeline, plan or earlier chapter it contradicts in `against`. Run `finding_check.py` on the block. As `xuong-kiem`, return the block in the handoff; the main session checks it again and records the tables in `ch<NN>-review.md` beside the chapter (needed by `finalize-chapter`).
 - Include `- Used: check-continuity` in the handoff block.

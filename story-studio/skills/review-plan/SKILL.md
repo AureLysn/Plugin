@@ -30,5 +30,5 @@ description: "Audit a chapter_plan or arc outline against 7 structural, POV, hoo
 
 ## 3. Output Format
 
-Report each of the 7 gates as `PASS`, `WARN`, or `FAIL` with specific scene/line references (`[[feedback]]`). If any gate is `FAIL`, block transition to `write-chapter` until revised.
+Report each of the 7 gates as `PASS`, `WARN`, or `FAIL`. Every `WARN` and `FAIL` is a finding in one JSON block that quotes the plan (`shared/working-standard.md` §5; categories `pov`, `structure`, `logic`, `hook`, `voice`, `pacing`, and `missing` for what the arc outline demands), checked with `finding_check.py --target <plan>`. If any gate is `FAIL`, block transition to `write-chapter` until revised.
 - Include `- Used: review-plan` in the handoff block.

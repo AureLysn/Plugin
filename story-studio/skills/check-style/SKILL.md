@@ -45,6 +45,6 @@ description: "Audit chapter prose against project style targets (02_Story_Bible/
    - Dialogue punctuation & address forms (`addressing:` in relationship notes)
    - Action beats vs speech tags (`[[said-and-action-beats]]` — keep speech tags `≤ 35%`)
    - Cut closing moral summaries or unearned emotional tags (`[[resist-the-urge-to-explain]]`)
-4. **Report findings with line references:**
-   Present the style findings table (`Rule · Target · Measured · Verdict`). Run as `xuong-kiem`, return it in the handoff; the main session records it in `ch<NN>-review.md` beside the chapter (needed by `finalize-chapter`).
+4. **Report findings with their words:**
+   Present the measured table (`Rule · Target · Measured · Verdict`). Everything that points at a passage goes into one JSON block (`shared/working-standard.md` §5; categories `style`, `voice`, `dialogue`, `language`, `pacing`, `repetition`), checked with `finding_check.py`. As `xuong-kiem`, return both in the handoff; the main session checks the block again and records them in `ch<NN>-review.md` beside the chapter (needed by `finalize-chapter`).
 - Include `- Used: check-style` in the handoff block.
