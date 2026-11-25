@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "aurelysn-vault",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Local plugin marketplace for AureLysn Vault (D:\\AureLysn) — Git safety, system administration, storage sidecars, fiction continuation studio, and design review",
   "owner": {
     "name": "Aurel"
@@ -30,8 +30,8 @@
     },
     {
       "name": "story-studio",
-      "description": "Fiction continuation and original story studio for 05_Evasion/01_Oeuvre/: source ingestion, entity extraction, style profiling, drop-point analysis, 7-gate outline planning, chapter drafting, blind continuity/POV verification, and 6-step finalization",
-      "version": "0.18.0",
+      "description": "Fiction continuation and original story studio for 05_Evasion/01_Oeuvre/: source ingestion, entity extraction, style profiling, drop-point analysis, 7-gate outline planning, chapter drafting with a broken-output gate, blind continuity/POV verification whose findings must quote the text, and 6-step finalization",
+      "version": "0.19.0",
       "source": "./story-studio",
       "category": "writing"
     },

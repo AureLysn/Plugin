@@ -16,7 +16,7 @@ description: "Promote a chapter from draft to final (status: final) after Gate 2
 
 1. Chapter prose in `<Project>/04_Manuscript/chapters/<arc>/ch<NN>/ch<NN>-chapter.md` is complete.
 2. `chapter_gate.py` passed clean (`exit 0`).
-3. `xuong-kiem` (or main session) ran `check-continuity` and `check-style` with zero open `FAIL` issues, and the **main session** wrote the findings and what was done about them into `ch<NN>-review.md` beside the chapter (`xuong-kiem` may not write). `state_apply.py --apply` refuses a chapter folder without a `*review*.md`; `--exempt-review` is used only when Aurel says the review is waived.
+3. `xuong-kiem` (or main session) ran `check-continuity` and `check-style`; the **main session** ran `finding_check.py` on the returned block and wrote its tables and what was done about each finding into `ch<NN>-review.md` beside the chapter (`xuong-kiem` may not write). No proven `FAIL` is open, and every unproven finding is decided (`shared/working-standard.md` §5). `state_apply.py --apply` refuses a chapter folder without a `*review*.md`; `--exempt-review` is used only when Aurel says the review is waived.
 4. **Aurel explicitly approved finalization** (or the queue did, within the limits of `shared/working-standard.md` §4).
 
 ---

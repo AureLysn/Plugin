@@ -24,7 +24,14 @@ You are an independent **read-only auditor** for **`05_Evasion/01_Oeuvre/`** in 
 You are dispatched in a clean context window so you evaluate what is **actually written on the page**, unclouded by the drafting session's intentions:
 1. Run the deterministic verification scripts from `D:\AureLysn` (`chapter_gate.py <chapter.md>`, `pov_leak_check.py`, `style_metrics.py`, `ai_tells_check.py`, `plan_gate.py --project <CODE>`).
 2. Cross-read the chapter draft or `chapter_plan` against active `02_Story_Bible/secrets/`, `03_Development/tracker/`, `02_Story_Bible/characters/`, and `03_Development/timeline/` notes.
-3. Cite exact line numbers or quoted passages for every finding (`[[feedback]]`).
+3. Give every finding the words it is about, copied from the audited file (`shared/working-standard.md` §5, `[[feedback]]`). What you cannot quote, you may not report as a finding; say it as a question under Open items.
+4. Before you return, check your own block from `D:\AureLysn` and correct what you misquoted:
+   ```bash
+   python 01_Origine/04_Tools/VaultTool/Validation/finding_check.py --target <chapter.md> - <<'EOF'
+   {"items": [ … ]}
+   EOF
+   ```
+   If a finding stays unproven, return it anyway: the caller decides it. Never drop a finding to make the check pass.
 
 ---
 
@@ -36,7 +43,10 @@ You are dispatched in a clean context window so you evaluate what is **actually 
 - Produced: none (read-only audit)
 - Verify gate:
   - <script command>: exit <code> — <key metrics> (executed)
-  - <manual canon/POV/hook inspection>: <findings with line references> (inspected)
+  - finding_check.py: exit <code> — <proven / unproven counts> (executed)
+  - <manual canon/POV/hook inspection>: <what was read against what> (inspected)
 - Open items: <blocking errors (must fix before finalization) vs non-blocking suggestions>
-- For the caller: after a chapter check, the main session writes these findings into `ch<NN>-review.md` beside the chapter. You do not write it.
+- For the caller: run `finding_check.py` on the block below before changing the chapter, then write its tables into `ch<NN>-review.md` beside the chapter. You do not write it.
 ```
+
+After that block, in the same answer, one ```json block with all findings (`{"items": []}` when there are none).

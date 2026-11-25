@@ -56,7 +56,9 @@ Always run from the vault root (`D:\AureLysn`):
 | `Core/vault_doctor.py --include-fiction` | Validates frontmatter, enums, IDs, and wikilinks across Root 1 + Root 2 |
 | `Core/vault_index.py --build --include-fiction` | Rebuilds Root 1 and Root 2 search indexes |
 | `Core/context_resolver.py` | Resolves permitted context notes for `--scene <scene-card>` or `--project <CODE> --pov <char>` (`--role writer | planner | reviewer`) |
-| `Validation/chapter_gate.py <chapter.md>` | Master chapter gate running `style_metrics`, `ai_tells_check`, and `pov_leak_check` |
+| `Validation/chapter_gate.py <chapter.md>` | Chapter gate: style targets of the project's `gate:` block, banned phrases, em dash and ASCII ellipsis, phrases repeated across chapters, broken output (`degeneration.py`). It does not run `style_metrics`, `ai_tells_check` or `pov_leak_check`: run those beside it |
+| `Validation/degeneration.py <file>` | Broken model output in any text (truncation, repetition, placeholders, refusals, assistant remarks, outline fields, pipeline labels, other scripts); part of `chapter_gate.py`, also for one pasted block |
+| `Validation/finding_check.py --target <file> <json \| ->` | Keeps only audit findings whose quotations stand in the text (`working-standard.md` §5) |
 | `Validation/pov_leak_check.py` | Scans chapter prose against `02_Story_Bible/secrets/` (`known_by` / `suspected_by` / `unknown_to`, `leak_terms`) |
 | `Validation/ai_tells_check.py` | Checks cliché/AI-tell phrases and regex density against `02_Story_Bible/style/ai-tells.md` |
 | `Validation/entity_check.py --project <CODE>` | Gate of `extract-entities`: completeness of a project's character, location, organization, secret, hook and fact notes |
