@@ -26,7 +26,7 @@ description: "Drive a project's sequential task queue (hang-doi.json via giao_vi
    ```bash
    python 01_Origine/04_Tools/VaultTool/Tracking/giao_viec.py next --project <CODE>
    ```
-   `next` prints the job, its prompt and what it waits for. It changes nothing.
+   `next` prints the job, its prompt and what it waits for. It also closes the approval stops that the queue's config switched off: the commit stop only when it is next and `chapter_gate.py`, run again, gives exit `0` with nothing waived; otherwise it waits for Aurel.
 3. **Agent job: confirm model and effort with Aurel first** (once per day, or once for the batch with `--scope dot`). The tool refuses to start an agent job without it:
    ```bash
    python 01_Origine/04_Tools/VaultTool/Tracking/giao_viec.py confirm --project <CODE> --by Aurel --note "<model, effort>"
@@ -42,11 +42,12 @@ description: "Drive a project's sequential task queue (hang-doi.json via giao_vi
    python 01_Origine/04_Tools/VaultTool/Tracking/giao_viec.py done --project <CODE> --note "<files, metrics>"
    python 01_Origine/04_Tools/VaultTool/Tracking/giao_viec.py done --project <CODE> --nang <N> --note "..."   # review: N = FAIL findings returned, proven or not; fix: N = proven ones not fixed + unproven ones not refuted
    ```
+   A gate at exit `1` does not stop the queue, but `done` prints its verdict and logs it (`gate-warn`): read it before going on. After `write`, a POV place to read goes into the `check` step; after `fix` there is no further check, so it goes to Aurel at the commit stop (`[[09-gates]]` §2). The `write` and `fix` gates are `min_length` and `chapter_gate` (which runs `style_metrics`, `ai_tells_check` and `pov_leak_check`). `config.waived_gates` may name the gate or one of its three parts, with Aurel's reason; `done` prints and logs what was left out (`gate-waived`).
    A job that cannot be finished: `fail --project <CODE> --why "..."`; the queue stops. After the cause is fixed: `retry --project <CODE>` (at most `config.max_attempts`).
 6. **Approval stops.** A `human` job opens only on Aurel's word:
    ```bash
    python 01_Origine/04_Tools/VaultTool/Tracking/giao_viec.py approve --project <CODE> --by Aurel --note "..."
    ```
-   Exception (Aurel, 2026-10-25): when the queue's `config.auto_approve` is on, `auto --project <CODE>` approves the two stops **inside** a chapter (plan approval, commit approval) by itself, and only when the review and fix steps reported 0 serious findings and the measured gate passed. Each such approval is listed for Aurel under "Duyệt sau"; `seen --project <CODE> --by Aurel` clears the list once Aurel has looked. The arc gate is never approved this way.
+   Exception (Aurel, 2026-10-25): when the queue's `config.auto_approve` is on, `auto --project <CODE>` approves the two stops **inside** a chapter (plan approval, commit approval) by itself, and only when the fix step left 0 serious findings and the measured gate passed: for the commit stop the tool runs `chapter_gate.py` again and refuses at exit `1`, while the gate, one of its parts or `min_length` is waived, or when the `state_apply` dry run names a note that does not exist. Each such approval is listed for Aurel under "Duyệt sau"; `seen --project <CODE> --by Aurel` clears the list once Aurel has looked. The arc gate is never approved this way.
 7. **Loop until an approval stop, failure, or empty queue.**
 - Include `- Used: dieu-phoi-hang-doi` in the handoff block.
