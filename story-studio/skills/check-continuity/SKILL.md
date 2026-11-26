@@ -16,9 +16,10 @@ description: "Audit a chapter draft or outline for continuity errors, POV secret
 
 1. **Run Deterministic POV Leak & Hook Gates (`executed`):**
    ```bash
-   python 01_Origine/04_Tools/VaultTool/Validation/pov_leak_check.py --project <CODE> --chapter <chapter-path>
+   python 01_Origine/04_Tools/VaultTool/Validation/pov_leak_check.py --chapter <chapter-path>
    python 01_Origine/04_Tools/VaultTool/Tracking/hook_ledger.py --project <CODE>
    ```
+   The POV comes from the scene cards or the chapter's `pov`; with several POVs each scene is checked by its own POV (`scene_povs` or the cards). Read whether the declared POV of each scene is the head the scene is really told from: a wrong map hides a leak (`FAIL`, category `pov`). Without a map that fits, name the POV of each scene yourself and run the tool with `--scene-povs a,b,a`; it writes nothing. A secret the tool cannot check is searched by reading, and so is a chapter rewritten after its POV learned a secret (`known_by` has no date, `[[05-visibility]]` §1.1). `--full` prints every place.
 2. **Inspect Semantic Continuity Across 5 Axes (`inspected`):**
    Cross-read the chapter against `<Project>/02_Story_Bible/`, `<Project>/03_Development/` and the preceding chapter summary (`04_Manuscript/chapters/`):
    - **Epistemic / POV Firewall (`[[05-visibility]]`):** Does the POV character react to, infer, or use terminology belonging to a secret they have not yet learned (even without using the exact keyword banned in `pov_leak_check.py`)?

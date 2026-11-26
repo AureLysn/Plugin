@@ -15,7 +15,7 @@ description: "Promote a chapter from draft to final (status: final) after Gate 2
 ## 1. Preconditions Before Finalization
 
 1. Chapter prose in `<Project>/04_Manuscript/chapters/<arc>/ch<NN>/ch<NN>-chapter.md` is complete.
-2. `chapter_gate.py` passed clean (`exit 0`).
+2. `chapter_gate.py --full` passed clean (`exit 0`), without `--skip`; a part Aurel waived is named in `ch<NN>-review.md` with Aurel's reason, and Aurel approves that commit (`[[09-gates]]` §2). At exit `1`, each line it names (a missed target, an AI-tell warning, a POV place to read, a secret it cannot check) goes to Aurel with the review, as `[[09-gates]]` §2 (Seam 2) says; what was read and what Aurel accepts is recorded in `ch<NN>-review.md`. Exit `2` never goes further.
 3. `xuong-kiem` (or main session) ran `check-continuity` and `check-style`; the **main session** ran `finding_check.py` on the returned block and wrote its tables and what was done about each finding into `ch<NN>-review.md` beside the chapter (`xuong-kiem` may not write). No proven `FAIL` is open, and every unproven finding is decided (`shared/working-standard.md` §5). `state_apply.py --apply` refuses a chapter folder without a `*review*.md`; `--exempt-review` is used only when Aurel says the review is waived.
 4. **Aurel explicitly approved finalization** (or the queue did, within the limits of `shared/working-standard.md` §4).
 
@@ -28,8 +28,9 @@ description: "Promote a chapter from draft to final (status: final) after Gate 2
    - Characters: status changes, injuries, location changes
    - Relationships: relationship level or address shifts
    - Hooks: `open` → `partially_paid` | `paid_off` (referencing hook IDs)
-   - Secrets: `known_by` / `suspected_by` additions
+   - Secrets: `known_by` / `suspected_by` additions (`known_by_add`; a list written over several lines or as a block goes to "CAN SUA TAY": add the name by hand)
    - Timeline: event timestamp and summary
+   - `state_apply` writes only secrets, hooks, arcs and questions; characters, relationships, timeline, new entities and any key under `changes:` that it does not know go to "CAN SUA TAY"
 2. **Preview via `state_apply.py` (Dry Run):**
    ```bash
    python 01_Origine/04_Tools/VaultTool/Tracking/state_apply.py <path-to-chNN-delta.yaml>

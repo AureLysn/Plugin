@@ -28,7 +28,7 @@ description: "Create a multi-chapter arc outline (type: arc) or a 7-gate chapter
    ```
 3. **Draft `<Project>/04_Manuscript/chapters/<arc>/ch<NN>/ch<NN>-plan.md` (`type: chapter_plan`, `status: planned`):**
    Use `01_Origine/04_Tools/Templates/writing/Chapter-Plan.md` and `Scene-Card.md`. Every scene must explicitly state:
-   - **Single POV character** (`[[one-point-of-view-per-scene]]`) and what secrets they are **forbidden** to know (`unknown_to` in `02_Story_Bible/secrets/`).
+   - **Single POV character** (`[[one-point-of-view-per-scene]]`; `pov:` of the card, cards named in the order of the scenes: `scenes/01-…`, `02-…` in the chapter's folder — the gate checks each scene by its card) and what secrets they are **forbidden** to know (`unknown_to` in `02_Story_Bible/secrets/`). What the scene must not touch stands in the card's `forbidden_secrets:`, what the whole chapter must not touch in the plan's (`[[05-visibility]]` §4).
    - **Goal → Opposition → Outcome** (`Yes, but` / `No, and furthermore` — `[[scene-goal-conflict-outcome]]`).
    - **Value Shift (`+/-`)** (`[[scene-must-turn]]`) — if a scene starts and ends on the same emotional/narrative value, cut or merge it.
    - **Hooks planted / advanced / paid off** (`03_Development/tracker/`) and the **chapter-end hook** (`[[chapter-end-hook]]`).
@@ -36,5 +36,5 @@ description: "Create a multi-chapter arc outline (type: arc) or a 7-gate chapter
    ```bash
    python 01_Origine/04_Tools/VaultTool/Core/vault_doctor.py --include-fiction
    ```
-   Fix any missing fields or broken links. The plan's content (POV, value turn, hooks) is judged by `review-plan`; no script reads an individual plan.
+   Fix any missing fields or broken links. The plan's content (POV, value turn, hooks) is judged by `review-plan`; scripts read only its `forbidden_secrets`, through `chapter_gate`, when it sits beside the chapter ([[05-visibility]] §4).
 - Include `- Used: plan-continuation` in the handoff block.
