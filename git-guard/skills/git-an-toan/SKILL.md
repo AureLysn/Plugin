@@ -20,7 +20,12 @@ git worktree list
 2. **Verify current branch and working tree:**
    - On the main trees of the vault (`D:\AureLysn`, `D:\AureLysn\05_Evasion`, `D:\AureLysn\04_Portfolio`), the checked-out branch must remain `main` so Obsidian and concurrent sessions always read the canonical state.
    - Never run `git checkout <branch>`, `git switch`, or `gh pr checkout` directly on one of those three trees (blocked by `chan_checkout_cay_chinh.py`).
-3. **Every repository works by branch → PR (Aurel, 2026-11-14).** The vault is three repositories with a GitHub remote each: the root `D:\AureLysn` (`AureLysn/Aurelysn`, private), `05_Evasion/` (`AureLysn/Evasion`, public) and `04_Portfolio/` (`AureLysn/Portfolio`, public, including the website code in `Portfolio_Web/`). The apps `Atelier` (`AureLysn/Atelier`) and `AureLysnOS` (`AureLysn/AurelysnOS`) are repositories of their own. The same rule holds in all five: no commit on `main`; work on a branch in an external worktree (§4), open a PR and merge it (`pr-va-merge`), then pull `main` into the main tree.
+3. **Every repository works by branch → PR (Aurel, 2026-11-14).** Six repositories, with the visibility that `gh repo list AureLysn` reported on 2026-11-28 (`gh repo view --json visibility` gives it for the current one):
+   - The vault is three repositories with a GitHub remote each: the root `D:\AureLysn` (`AureLysn/Aurelysn`, **private**), `05_Evasion/` (`AureLysn/Evasion`, **public**) and `04_Portfolio/` (`AureLysn/Portfolio`, **public**, including the website code in `Portfolio_Web/`).
+   - The apps `Atelier` (`AureLysn/Atelier`, **private**) and `AureLysnOS` (`AureLysn/AurelysnOS`, **private**) are repositories of their own.
+   - `AureLysn/Plugin` (**public**) has no folder of its own: each plugin release copies `01_Origine/03_Systems/Plugin/` into it from a fresh clone (`[[_SYSTEMS-MOC]]` §4.3).
+
+   The same rule holds in all six: no commit on `main`; work on a branch in a worktree (§4; for `AureLysn/Plugin`, in the fresh clone), open a PR and merge it (`pr-va-merge`), then pull `main` into the main tree. A push to one of the three public repositories publishes what it adds, so `pr-va-merge` §1 step 4 scans it first.
 4. **Push once, at the close of the session** (Aurel, 2026-11-14): commit while working, then push the branch and open the PR when the handoff is written and the gates have passed — not after each commit. The vault's full end-of-session order is in `[[session-handoff-workflow]]`. In `05_Evasion/`, close Nexus before committing `library.db`.
 
 ---
@@ -55,22 +60,26 @@ Never execute any of the following without Aurel's explicit confirmation in the 
 ## 4. Worktree Isolation (`git worktree`)
 
 This is how every change is made (§1.3). The main tree stays on `main`; the branch lives in a worktree:
-1. Place external worktrees **outside** the vault directory (`D:\AureLysn-wt\<branch-slug>`) so they do not bloat zip snapshots or nested file scans. From the root repository:
+1. **Two locations are valid** (Aurel, 2026-11-28):
+   - `D:\AureLysn-wt\<branch-slug>`, outside the vault folder, for a worktree that a session creates itself. From the root repository:
+     ```bash
+     git worktree add ../AureLysn-wt/<slug> -b <type>/<slug>
+     ```
+     From `05_Evasion/` or `04_Portfolio/` the same folder is two levels up; prefix the slug with the repository so the names do not collide:
+     ```bash
+     git -C D:/AureLysn/05_Evasion worktree add D:/AureLysn-wt/evasion-<slug> -b <type>/<slug>
+     ```
+     A worktree of `05_Evasion/` or `04_Portfolio/` is not inside a vault root, so the vault tools need `--root` (or `AURELYSN_VAULT`) there; the gates are run from `D:\AureLysn` after the merge is pulled.
+   - `D:\AureLysn\.claude\worktrees\<name>`, where the Claude Code desktop app creates a session's worktree of the root repository (step 3).
+
+   Neither location bloats the zip snapshots or the vault's file scans: the first is outside the vault folder; for the second, `snapshot.ps1` leaves out `.claude\worktrees`, `.vaultignore` lists `.claude/`, and a tool that walks the disk itself must skip it (`[[ai-tool-and-environment-quirks]]` §3, item 5).
+2. **A branch that will commit notes** also needs the two nested repositories inside its worktree (`<worktree>`, in either location), as detached checkouts. The stale-index hook of `vault-ops` rebuilds the index from disk at commit, and without them the notes of `04_Portfolio/` and `05_Evasion/` look deleted (`[[plugin-benchmark-20261124]]` V9):
    ```bash
-   git worktree add ../AureLysn-wt/<slug> -b <type>/<slug>
-   ```
-   From `05_Evasion/` or `04_Portfolio/` the same folder is two levels up; prefix the slug with the repository so the names do not collide:
-   ```bash
-   git -C D:/AureLysn/05_Evasion worktree add D:/AureLysn-wt/evasion-<slug> -b <type>/<slug>
-   ```
-   A worktree of `05_Evasion/` or `04_Portfolio/` is not inside a vault root, so the vault tools need `--root` (or `AURELYSN_VAULT`) there; the gates are run from `D:\AureLysn` after the merge is pulled.
-2. **A branch that will commit notes** also needs the two nested repositories inside its worktree, as detached checkouts. The stale-index hook of `vault-ops` rebuilds the index from disk at commit, and without them the notes of `04_Portfolio/` and `05_Evasion/` look deleted (`[[plugin-benchmark-20261124]]` V9):
-   ```bash
-   git -C D:/AureLysn/04_Portfolio worktree add --detach D:/AureLysn-wt/<slug>/04_Portfolio
-   git -C D:/AureLysn/05_Evasion worktree add --detach D:/AureLysn-wt/<slug>/05_Evasion
+   git -C D:/AureLysn/04_Portfolio worktree add --detach <worktree>/04_Portfolio
+   git -C D:/AureLysn/05_Evasion worktree add --detach <worktree>/05_Evasion
    ```
    They are there to be read: change those two repositories in a worktree of their own (step 1), and rebuild the index without `--include-fiction`, which would rewrite the fiction index of the nested checkout. Remove both before the outer worktree (`pr-va-merge` §3).
-3. If the Claude Code desktop app creates a worktree inside `.claude/worktrees/<name>`, verify `.claude/worktrees/` is listed in `.gitignore` and `.vaultignore`.
+3. In a worktree that the Claude Code desktop app created inside `.claude/worktrees/<name>`, verify that `.gitignore` and `.vaultignore` list `.claude/` (both did on 2026-11-28) before the first commit.
 4. After the branch is merged into `main` by its PR (`pr-va-merge`), remove the worktree and delete the merged branch.
 
 ---

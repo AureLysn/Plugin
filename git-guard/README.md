@@ -1,6 +1,6 @@
 # `git-guard` — Safe Git Operations & PreToolUse Guards
 
-General-purpose Git safety plugin for **all repositories** on Aurel's workstation (the vault root `D:\AureLysn`, a repository since 2026-11-12, the two app repositories in `01_Origine/03_Systems/`: `Atelier`, `AureLysnOS`, and the two zone repositories `05_Evasion/` and `04_Portfolio/`, the latter holding the website code in `Portfolio_Web/`). Its skills work in any Git repository; `nhanh-va-commit` and `git-cuu-ho` name vault paths (`01_Origine/04_Tools/VaultTool/…`, `01_Origine/05_Meta/Index/vault-index.json`) only in the steps that apply when the repository is the vault.
+General-purpose Git safety plugin for **all repositories** on Aurel's workstation (the vault root `D:\AureLysn`, a repository since 2026-11-12; the two app repositories in `01_Origine/03_Systems/`, `Atelier` and `AureLysnOS`; the two zone repositories `05_Evasion/` and `04_Portfolio/`, the latter holding the website code in `Portfolio_Web/`; and the public `AureLysn/Plugin`, which receives the plugin copies). Its skills work in any Git repository; `nhanh-va-commit` and `git-cuu-ho` name vault paths (`01_Origine/04_Tools/VaultTool/…`, `01_Origine/05_Meta/Index/vault-index.json`) only in the steps that apply when the repository is the vault.
 
 ---
 
@@ -8,9 +8,9 @@ General-purpose Git safety plugin for **all repositories** on Aurel's workstatio
 
 | Skill | Purpose |
 |---|---|
-| `git-an-toan` | Pre-flight Git inspection, `.git/index.lock` checks, line-ending protection, worktree placement outside the main tree, and destructive-command prohibitions |
+| `git-an-toan` | Pre-flight Git inspection, the six repositories and their visibility (0.9.0), `.git/index.lock` checks, line-ending protection, worktree placement (`D:\AureLysn-wt\` or the desktop app's `.claude/worktrees/`, 0.9.0), and destructive-command prohibitions |
 | `nhanh-va-commit` | Branch naming (`loai/mo-ta-ngan`), explicit file staging (never `git add -A`), pre-commit gate execution when `CLAUDE.md` + `01_Origine/` exist, and `git diff --stat` line-ending verification |
-| `pr-va-merge` | For all five repositories, once at the close of a session (Aurel, 2026-11-14). Pushing feature branches, opening GitHub PRs via `gh`, inspecting CI checks, and merging safely without mutating the main working tree |
+| `pr-va-merge` | For all six repositories, once at the close of a session (Aurel, 2026-11-14). A disclosure scan before a push to a public remote (0.9.0; Aurel, 2026-11-28), pushing feature branches, opening GitHub PRs via `gh`, inspecting CI checks, and merging safely without mutating the main working tree |
 | `git-cuu-ho` | Recovering from mid-session Git faults: stale `index.lock`, wrong-branch commits, CRLF/LF full-file diffs, merge conflicts, and `git reflog` recovery |
 
 ---
